@@ -12,3 +12,19 @@ pool:
 steps:
 - script: cat README.md
   displayName: 'Run a one-line script'
+
+- task: SonarCloudPrepare@1
+  inputs:
+    SonarCloud: 'defra-sonarcloud'
+    organization: 'defra'
+    scannerMode: 'MSBuild'
+    projectKey: 'DEFRA_ncea-infrastructure-core'
+    projectName: 'ncea-infrastructure-core'
+
+- task: SonarCloudAnalyze@1
+  inputs:
+    jdkversion: 'JAVA_HOME_17_X64'
+
+- task: SonarCloudPublish@1
+  inputs:
+    pollingTimeoutSec: '300'
