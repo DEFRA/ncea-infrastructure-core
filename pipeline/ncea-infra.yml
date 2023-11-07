@@ -21,6 +21,11 @@ steps:
     projectKey: 'DEFRA_ncea-infrastructure-core'
     projectName: 'ncea-infrastructure-core'
 
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: '**/*.csproj'
+
 - task: SonarCloudAnalyze@1
   inputs:
     jdkversion: 'JAVA_HOME_17_X64'
