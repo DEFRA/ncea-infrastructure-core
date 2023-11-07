@@ -1,0 +1,7 @@
+C:\training\204-webapp\azurewebapptest\obj\Release\net6.0\PubTmp\Out\azurewebapptest.exe
+C:\training\204-webapp\azurewebapptest\obj\Release\net6.0\PubTmp\Out\appsettings.Development.json
+C:\training\204-webapp\azurewebapptest\obj\Release\net6.0\PubTmp\Out\appsettings.json
+C:\training\204-webapp\azurewebapptest\obj\Release\net6.0\PubTmp\Out\azurewebapptest.dll
+C:\training\204-webapp\azurewebapptest\obj\Release\net6.0\PubTmp\Out\azurewebapptest.deps.json
+C:\training\204-webapp\azurewebapptest\obj\Release\net6.0\PubTmp\Out\azurewebapptest.runtimeconfig.json
+C:\training\204-webapp\azurewebapptest\obj\Release\net6.0\PubTmp\Out\azurewebapptest.pdb
