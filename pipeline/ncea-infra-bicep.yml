@@ -8,10 +8,10 @@ trigger:
 - main
 
 repositories:
-  - repository: DevOpsCommonInfra
-    name: DEFRA-DEVOPS-COMMON/Defra.Infrastructure.Common
-    type: git
-    ref: master
+- repository: DevOpsCommonInfra
+  name: DEFRA-DEVOPS-COMMON/Defra.Infrastructure.Common
+  type: git
+  ref: master
 
 pool:
   vmImage: 'ubuntu-latest'
