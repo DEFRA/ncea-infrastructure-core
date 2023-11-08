@@ -1,0 +1,21 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+# Use templates from Defra here https://dev.azure.com/defragovuk/DEFRA-DEVOPS-COMMON/_git/Defra.Infrastructure.Common
+
+trigger:
+- main
+
+repositories:
+  - repository: DevOpsCommonInfra
+    name: DEFRA-DEVOPS-COMMON/Defra.Infrastructure.Common
+    type: git
+    ref: master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+
+- checkout: DevOpsCommonInfra
