@@ -9,7 +9,7 @@ resources:
   - repository: DevOpsCommonInfra
     name: DEFRA-DEVOPS-COMMON/Defra.Infrastructure.Common
     type: git
-    ref: master
+    ref: main
 
 pool:
   vmImage: 'ubuntu-latest'
