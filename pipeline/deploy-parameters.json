@@ -1,0 +1,70 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "acrName": {
+      "value": "opcontainerregistry123"
+    },
+    "acrSku": {
+      "value": "Premium"
+    },
+    "privateEndpointName": {
+      "value": "priv-endpoint-containerreg"
+    },
+    "vnetResourceGroup": {
+      "value": "op-ncea-nw"
+    },
+    "vnetName": {
+      "value": "vnet-op-ncea-poc"
+    },
+    "vnetSubnetName": {
+      "value": "pe-subnet"
+    },
+    "environment": {
+      "value": "dev"
+    },
+    "customTags": {
+      "value": {
+        "AppName": "ncea"
+      }
+    },
+    "defaultTags": {
+      "value": {
+        "Environment": "environment",
+        "Tier": "SHARED"
+      }
+    },
+    "vaultName": {
+      "value": "opkeyvault123"
+    },
+    "tenantId": {
+      "value": "40e5f2bd-169f-44c9-af12-d246dbabf571"
+    },
+    "privateEndpointNameKv": {
+      "value": "priv-endpoint-keyvault"
+    },
+    "kvSku": {
+      "value": {
+        "name": "standard",
+        "family": "A"
+      }
+    },
+    "cosmosAccountName": {
+      "value": "opcosmodb123"
+    },
+    "defaultConsistencyLevel": {
+      "value": "Session"
+    },
+    "secondaryRegion": {
+      "value": "ukwest"
+    },
+    "cosmosPrivateEndpoint": {
+      "value": {
+        "name": "priv-endpoint-cosmosdb",
+        "vnetResourceGroup": "op-ncea-nw",
+        "vnetName": "vnet-op-ncea-poc",
+        "vnetSubnetName": "pe-subnet"
+      }
+    }
+  }
+}
