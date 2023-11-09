@@ -65,6 +65,27 @@
         "vnetName": "vnet-op-ncea-poc",
         "vnetSubnetName": "pe-subnet"
       }
+    },
+    "applicationInsightsName": {
+      "value": "opappinsights123"
+    },
+    "logAnalyticsInstanceName": {
+      "value": "oploganalytics123"
+    },
+    "logAnalyticsInstanceRg": {
+      "value": "op-ncea-nw"
+    },
+    "appServicePlanSku": {
+      "value": {
+        "Tier": "Standard",
+        "Name": "S1"
+      }
+    },
+    "appServicePlanName": {
+      "value": "opappserviceplan123"
+    },
+    "appServicePlanKind": {
+      "value": "linux"
     }
   }
 }
