@@ -101,6 +101,12 @@
     },
     "publicNetworkAccess": {
       "value": "Disabled"
+    },
+    "webAppNameFront": {
+      "value": "wallytheapiwebfront"
+    },
+    "privateEndpointFrontWebAppName": {
+      "value": "wallytheapiwebfront-privateendpoint"
     }
   }
 }

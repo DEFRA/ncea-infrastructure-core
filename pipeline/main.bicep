@@ -34,14 +34,18 @@ param privateEndpointApiWebAppName string
 param webAppNameApiDisablePublicAccess bool
 param webAppSubnetName string
 param publicNetworkAccess string
+// web front params
+param webAppNameFront string
+param privateEndpointFrontWebAppName string
 
 // TO DO
+// TIDY PARAMS UP 
 // Get resource id of external log analytics instance - done
 // Application Insights - done
 // App Service plan - done
-// API App - App Insights connection strings to Web apps
-// Web App - App Insights connection strings to Web apps
-// Delegate subnet to Microsoft.Web * Delegate subnet to a service 'Microsoft.Web/serverFarms'
+// API App - App Insights connection strings to Web apps - done
+// Web App - App Insights connection strings to Web apps - done
+// Delegate subnet to Microsoft.Web * Delegate subnet to a service 'Microsoft.Web/serverFarms' CAN BE MANUAL
 // Cognitive search 
 // Data factory with system assigned identity
 // Blob storage 
@@ -85,6 +89,24 @@ module webAppApi '../modules/webApp.bicep' = {
     defaultTags: defaultTags
     webAppVnetSubnetId: webAppSubnet.id
     privateEndpointName: privateEndpointApiWebAppName
+    vnetResourceGroup: vnetResourceGroup
+    vnetName: vnetName
+    vnetSubnetName: privateEndpointSubnetName
+    applicationInsightsConnString: appInsights.outputs.applicationInsightsConnString
+    disablePublicAccess: webAppNameApiDisablePublicAccess
+    publicNetworkAccess: publicNetworkAccess
+  }
+}
+
+module webAppFront '../modules/webApp.bicep' = {
+  name: 'webAppFront'
+  params: {
+    serverFarmId: appServicePlan.outputs.appServicePlanId
+    location: location
+    webAppName: webAppNameFront
+    defaultTags: defaultTags
+    webAppVnetSubnetId: webAppSubnet.id
+    privateEndpointName: privateEndpointFrontWebAppName
     vnetResourceGroup: vnetResourceGroup
     vnetName: vnetName
     vnetSubnetName: privateEndpointSubnetName
