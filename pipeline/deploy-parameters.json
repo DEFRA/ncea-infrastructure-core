@@ -17,7 +17,7 @@
     "vnetName": {
       "value": "vnet-op-ncea-poc"
     },
-    "vnetSubnetName": {
+    "privateEndpointSubnetName": {
       "value": "pe-subnet"
     },
     "environment": {
@@ -86,6 +86,22 @@
     },
     "appServicePlanKind": {
       "value": "linux"
+    },
+    "webAppNameApi": {
+      "value": "wallytheapiwebapp"
+    },
+    "privateEndpointApiWebAppName": {
+      "value": "wallytheapiwebapp-privateendpoint"
+    },
+    "webAppNameApiDisablePublicAccess": {
+      "value": true
+    },
+    "webAppSubnetName": {
+      "value": "appservice-subnet"
+    },
+    "publicNetworkAccess": {
+      "value": "Disabled"
     }
   }
 }
+

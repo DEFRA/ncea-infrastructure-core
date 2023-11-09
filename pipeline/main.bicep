@@ -4,7 +4,7 @@ param acrSku string = 'Basic'
 param privateEndpointName string
 param vnetResourceGroup string
 param vnetName string
-param vnetSubnetName string
+param privateEndpointSubnetName string
 param environment string
 param customTags object
 param defaultTags object
@@ -20,10 +20,20 @@ param cosmosPrivateEndpoint object
 param secondaryRegion string
 param logAnalyticsInstanceName string
 param logAnalyticsInstanceRg string
+
+//App Insights params
 param applicationInsightsName string
+
+//App service plan params
 param appServicePlanSku object
 param appServicePlanName string
 param appServicePlanKind string
+// WebApp params
+param webAppNameApi string
+param privateEndpointApiWebAppName string
+param webAppNameApiDisablePublicAccess bool
+param webAppSubnetName string
+param publicNetworkAccess string
 
 // TO DO
 // Get resource id of external log analytics instance - done
@@ -31,6 +41,7 @@ param appServicePlanKind string
 // App Service plan - done
 // API App - App Insights connection strings to Web apps
 // Web App - App Insights connection strings to Web apps
+// Delegate subnet to Microsoft.Web * Delegate subnet to a service 'Microsoft.Web/serverFarms'
 // Cognitive search 
 // Data factory with system assigned identity
 // Blob storage 
@@ -40,12 +51,19 @@ param appServicePlanKind string
 // data factory identity assigned to key vault
 // Cosmos connection strings added to API app 
 // cosmos - update template to allow serverless option
+// Improve naming to reduce params
 
 // GET RESOURCE ID OF CENTRAL LOG ANALYTICS
 
 resource logAnalyticsInstance 'Microsoft.OperationalInsights/workspaces@2022-10-01' existing = {
   scope: resourceGroup(logAnalyticsInstanceRg) 
   name: logAnalyticsInstanceName
+}
+
+// Get subnet resource id
+resource webAppSubnet 'Microsoft.Network/virtualNetworks/subnets@2020-05-01' existing = {
+  scope: resourceGroup(vnetResourceGroup) 
+  name: '${vnetName}/${webAppSubnetName}'
 }
 
 module appInsights '../modules/applicationInsights.bicep' = {
@@ -55,6 +73,24 @@ module appInsights '../modules/applicationInsights.bicep' = {
     location: location
     logAnalyticsWorkspaceId: logAnalyticsInstance.id
     defaultTags: defaultTags
+  }
+}
+
+module webAppApi '../modules/webApp.bicep' = {
+  name: 'webAppApi'
+  params: {
+    serverFarmId: appServicePlan.outputs.appServicePlanId
+    location: location
+    webAppName: webAppNameApi
+    defaultTags: defaultTags
+    webAppVnetSubnetId: webAppSubnet.id
+    privateEndpointName: privateEndpointApiWebAppName
+    vnetResourceGroup: vnetResourceGroup
+    vnetName: vnetName
+    vnetSubnetName: privateEndpointSubnetName
+    applicationInsightsConnString: appInsights.outputs.applicationInsightsConnString
+    disablePublicAccess: webAppNameApiDisablePublicAccess
+    publicNetworkAccess: publicNetworkAccess
   }
 }
 
@@ -80,7 +116,7 @@ module registry '../../Defra.Infrastructure.Common/templates/Microsoft.Container
     privateEndpointName: privateEndpointName
     vnetResourceGroup: vnetResourceGroup
     vnetName: vnetName
-    vnetSubnetName: vnetSubnetName
+    vnetSubnetName: privateEndpointSubnetName
     customTags: customTags
     defaultTags: defaultTags
   }
@@ -95,7 +131,7 @@ module keyVault '../../Defra.Infrastructure.Common/templates/Microsoft.KeyVault/
     privateEndpointName: privateEndpointNameKv
     vnetResourceGroup: vnetResourceGroup
     vnetName: vnetName
-    vnetSubnetName: vnetSubnetName
+    vnetSubnetName: privateEndpointSubnetName
     customTags: customTags
     sku: kvSku
   }
