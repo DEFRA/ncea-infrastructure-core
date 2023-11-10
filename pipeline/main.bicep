@@ -39,6 +39,7 @@ param webAppNameFront string
 param privateEndpointFrontWebAppName string
 param cogSearchDisablePublicAccess bool
 param cogSearchInstanceName string
+param dataFactoryName string
 
 // TO DO
 // TIDY PARAMS UP 
@@ -61,6 +62,7 @@ param cogSearchInstanceName string
 // Create cosmos collection
 // Automate indexing of Cosmos db with cognitive search
 // MAke disabled public access conditional based on param
+// Enabled managed identity on all resources - will need to fork cosmos and container reg
 
 // GET RESOURCE ID OF CENTRAL LOG ANALYTICS
 
@@ -82,6 +84,20 @@ module appInsights '../modules/applicationInsights.bicep' = {
     location: location
     logAnalyticsWorkspaceId: logAnalyticsInstance.id
     defaultTags: defaultTags
+  }
+}
+
+module dataFactory '../modules/dataFactory.bicep' = {
+  name: 'dataFactory'
+  params: {
+    dataFactoryName: dataFactoryName
+    location: location
+    defaultTags: defaultTags
+    disablePublicAccess: cogSearchDisablePublicAccess //CORRECT PARAMS
+    vnetResourceGroup: vnetResourceGroup
+    vnetName: vnetName
+    privateEndpointSubnetName: privateEndpointSubnetName
+    privateEndpointName: '${dataFactoryName}-privateendpoint'
   }
 }
 

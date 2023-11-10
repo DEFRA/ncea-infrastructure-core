@@ -113,6 +113,9 @@
     },
     "cogSearchDisablePublicAccess": {
       "value": true
+    },
+    "dataFactoryName": {
+      "value": "wallythedatafactory123"
     }
   }
 }
