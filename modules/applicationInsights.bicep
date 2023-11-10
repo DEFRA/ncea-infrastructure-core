@@ -3,6 +3,7 @@ param applicationInsightsName string
 param location string = resourceGroup().location
 param applicationType string = 'web'
 param defaultTags object
+
 resource applicationInsights 'Microsoft.Insights/components@2020-02-02' = {
   name: applicationInsightsName
   location: location
@@ -16,3 +17,4 @@ resource applicationInsights 'Microsoft.Insights/components@2020-02-02' = {
   }
 }
 
+output applicationInsightsConnString string = applicationInsights.properties.ConnectionString

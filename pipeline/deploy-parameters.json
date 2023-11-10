@@ -107,6 +107,12 @@
     },
     "privateEndpointFrontWebAppName": {
       "value": "wallytheapiwebfront-privateendpoint"
+    },
+    "cogSearchInstanceName": {
+      "value": "wallythecogsearch123"
+    },
+    "cogSearchDisablePublicAccess": {
+      "value": true
     }
   }
 }

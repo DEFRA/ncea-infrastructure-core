@@ -37,6 +37,8 @@ param publicNetworkAccess string
 // web front params
 param webAppNameFront string
 param privateEndpointFrontWebAppName string
+param cogSearchDisablePublicAccess bool
+param cogSearchInstanceName string
 
 // TO DO
 // TIDY PARAMS UP 
@@ -45,8 +47,8 @@ param privateEndpointFrontWebAppName string
 // App Service plan - done
 // API App - App Insights connection strings to Web apps - done
 // Web App - App Insights connection strings to Web apps - done
-// Delegate subnet to Microsoft.Web * Delegate subnet to a service 'Microsoft.Web/serverFarms' CAN BE MANUAL
-// Cognitive search 
+// Delegate subnet to Microsoft.Web * Delegate subnet to a service 'Microsoft.Web/serverFarms' CAN BE MANUAL for lab
+// Cognitive search - done
 // Data factory with system assigned identity
 // Blob storage 
 // Redis cache
@@ -56,6 +58,9 @@ param privateEndpointFrontWebAppName string
 // Cosmos connection strings added to API app 
 // cosmos - update template to allow serverless option
 // Improve naming to reduce params
+// Create cosmos collection
+// Automate indexing of Cosmos db with cognitive search
+// MAke disabled public access conditional based on param
 
 // GET RESOURCE ID OF CENTRAL LOG ANALYTICS
 
@@ -64,7 +69,7 @@ resource logAnalyticsInstance 'Microsoft.OperationalInsights/workspaces@2022-10-
   name: logAnalyticsInstanceName
 }
 
-// Get subnet resource id
+// Get app service subnet resource id
 resource webAppSubnet 'Microsoft.Network/virtualNetworks/subnets@2020-05-01' existing = {
   scope: resourceGroup(vnetResourceGroup) 
   name: '${vnetName}/${webAppSubnetName}'
@@ -77,6 +82,20 @@ module appInsights '../modules/applicationInsights.bicep' = {
     location: location
     logAnalyticsWorkspaceId: logAnalyticsInstance.id
     defaultTags: defaultTags
+  }
+}
+
+module cogSearch '../modules/cognitiveSearch.bicep' = {
+  name: 'cognitiveSearch'
+  params: {
+    cogSearchInstanceName: cogSearchInstanceName
+    location: location
+    defaultTags: defaultTags
+    disablePublicAccess: cogSearchDisablePublicAccess
+    vnetResourceGroup: vnetResourceGroup
+    vnetName: vnetName
+    privateEndpointSubnetName: privateEndpointSubnetName
+    privateEndpointName: '${cogSearchInstanceName}-privateendpoint'
   }
 }
 
@@ -114,6 +133,9 @@ module webAppFront '../modules/webApp.bicep' = {
     disablePublicAccess: webAppNameApiDisablePublicAccess
     publicNetworkAccess: publicNetworkAccess
   }
+  dependsOn: [
+    webAppApi
+  ]
 }
 
 module appServicePlan '../modules/appServicePlan.bicep' = {
