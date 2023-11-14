@@ -8,9 +8,6 @@
     "acrSku": {
       "value": "Premium"
     },
-    "privateEndpointName": {
-      "value": "priv-endpoint-containerreg"
-    },
     "vnetResourceGroup": {
       "value": "NCEA-NW-POC"
     },
@@ -47,13 +44,13 @@
       }
     },
     "cosmosAccountName": {
-      "value": "nceapoc-snd-cosmodb"
+      "value": "nceapoc-snd-cosmosdb"
     },
-    "defaultConsistencyLevel": {
+    "cosmosDatabaseName": {
+      "value": "ncea-metadata-test"
+    },
+    "cosmosConsistencyLevel": {
       "value": "Session"
-    },
-    "secondaryRegion": {
-      "value": "ukwest"
     },
     "cosmosPrivateEndpoint": {
       "value": {
@@ -62,6 +59,22 @@
         "vnetName": "vnet-snd-ncea-poc",
         "vnetSubnetName": "pe-subnet"
       }
+    },
+    "cosmosLocations": {
+      "value": [
+        {
+          "locationName": "uksouth",
+          "failoverPriority": 0,
+          "isZoneRedundant": false
+        }
+      ]
+    },
+    "cosmosCapabilities": {
+      "value": [
+        {
+          "name": "EnableServerless"
+        }
+      ]
     },
     "applicationInsightsName": {
       "value": "nceapoc-snd-appinsights"

@@ -1,7 +1,6 @@
 param acrName string
 param location string = resourceGroup().location
 param acrSku string = 'Basic'
-param privateEndpointName string
 param vnetResourceGroup string
 param vnetName string
 param privateEndpointSubnetName string
@@ -14,9 +13,12 @@ param tenantId string
 param kvSku object
 //CosmosDb params
 param cosmosAccountName string
-param defaultConsistencyLevel string
+param cosmosConsistencyLevel string
 param cosmosPrivateEndpoint object
-param secondaryRegion string
+param cosmosCapabilities array //required to be set for serverless
+param cosmosLocations array
+param cosmosDatabaseName string
+//param secondaryRegion string
 param logAnalyticsInstanceName string
 param logAnalyticsInstanceRg string
 
@@ -45,7 +47,7 @@ param dataFactoryName string
 // Delegate subnet to Microsoft.Web * Delegate subnet to a service 'Microsoft.Web/serverFarms' CAN BE MANUAL for lab
 // Blob storage 
 // Redis cache
-// cosmos - update template to allow serverless option
+// cosmos - update template to allow serverless option - done
 // Improve naming to reduce params
 // Create cosmos collection
 // Automate indexing of Cosmos db with cognitive search
@@ -161,7 +163,7 @@ module registry '../../Defra.Infrastructure.Common/templates/Microsoft.Container
     location: location
     environment: environment
     acrSku: acrSku
-    privateEndpointName: privateEndpointName
+    privateEndpointName: 'priv-endpoint-${acrName}'
     vnetResourceGroup: vnetResourceGroup
     vnetName: vnetName
     vnetSubnetName: privateEndpointSubnetName
@@ -185,18 +187,19 @@ module keyVault '../../Defra.Infrastructure.Common/templates/Microsoft.KeyVault/
   }
 }
 
-module cosmosDb '../../Defra.Infrastructure.Common/templates/Microsoft.DocumentDB/databaseAccounts.bicep' = {
+module cosmosDb '../modules/cosmosDb.bicep' = {
   name: 'cosmosDb'
   params: {
     accountName: cosmosAccountName
+    databaseName: cosmosDatabaseName
     location: location
-    defaultConsistencyLevel: defaultConsistencyLevel
+    defaultConsistencyLevel: cosmosConsistencyLevel
     customTags: customTags
     defaultTags: defaultTags
-    primaryRegion: location
+    cosmosLocations:cosmosLocations
     environment: environment
     privateEndpoint: cosmosPrivateEndpoint
-    secondaryRegion: secondaryRegion
+    cosmosCapabilities:cosmosCapabilities
   }
 }
 
