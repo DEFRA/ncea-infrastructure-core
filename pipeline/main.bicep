@@ -11,7 +11,6 @@ param defaultTags object
 // Key vault Params
 param vaultName string
 param tenantId string
-param privateEndpointNameKv string
 param kvSku object
 //CosmosDb params
 param cosmosAccountName string
@@ -30,39 +29,32 @@ param appServicePlanName string
 param appServicePlanKind string
 // WebApp params
 param webAppNameApi string
-param privateEndpointApiWebAppName string
 param webAppNameApiDisablePublicAccess bool
 param webAppSubnetName string
 param publicNetworkAccess string
 // web front params
 param webAppNameFront string
-param privateEndpointFrontWebAppName string
+// cog search params
 param cogSearchDisablePublicAccess bool
 param cogSearchInstanceName string
+//data factory params
 param dataFactoryName string
 
 // TO DO
-// TIDY PARAMS UP 
-// Get resource id of external log analytics instance - done
-// Application Insights - done
-// App Service plan - done
-// API App - App Insights connection strings to Web apps - done
-// Web App - App Insights connection strings to Web apps - done
+// TIDY PARAMS UP
 // Delegate subnet to Microsoft.Web * Delegate subnet to a service 'Microsoft.Web/serverFarms' CAN BE MANUAL for lab
-// Cognitive search - done
-// Data factory with system assigned identity
 // Blob storage 
 // Redis cache
-// Assign roles of managed identities:
-// Web apps managed identities added RBAC role of get to key vault
-// data factory identity assigned to key vault
-// Cosmos connection strings added to API app 
 // cosmos - update template to allow serverless option
 // Improve naming to reduce params
 // Create cosmos collection
 // Automate indexing of Cosmos db with cognitive search
-// MAke disabled public access conditional based on param
+// Make disabled public access conditional based on param
 // Enabled managed identity on all resources - will need to fork cosmos and container reg
+// Populate KeyVault:
+// 1. Cosmos connection strings
+// 2. Managed identities need RBAC permission of 'Key Vault Secrets User' ID = 4633458b-17de-408a-b874-0445c86b69e6
+// 2.Cont. Web App identities, cosmos db, data factory,
 
 // GET RESOURCE ID OF CENTRAL LOG ANALYTICS
 
@@ -97,7 +89,6 @@ module dataFactory '../modules/dataFactory.bicep' = {
     vnetResourceGroup: vnetResourceGroup
     vnetName: vnetName
     privateEndpointSubnetName: privateEndpointSubnetName
-    privateEndpointName: '${dataFactoryName}-privateendpoint'
   }
 }
 
@@ -111,7 +102,6 @@ module cogSearch '../modules/cognitiveSearch.bicep' = {
     vnetResourceGroup: vnetResourceGroup
     vnetName: vnetName
     privateEndpointSubnetName: privateEndpointSubnetName
-    privateEndpointName: '${cogSearchInstanceName}-privateendpoint'
   }
 }
 
@@ -123,7 +113,6 @@ module webAppApi '../modules/webApp.bicep' = {
     webAppName: webAppNameApi
     defaultTags: defaultTags
     webAppVnetSubnetId: webAppSubnet.id
-    privateEndpointName: privateEndpointApiWebAppName
     vnetResourceGroup: vnetResourceGroup
     vnetName: vnetName
     vnetSubnetName: privateEndpointSubnetName
@@ -141,7 +130,6 @@ module webAppFront '../modules/webApp.bicep' = {
     webAppName: webAppNameFront
     defaultTags: defaultTags
     webAppVnetSubnetId: webAppSubnet.id
-    privateEndpointName: privateEndpointFrontWebAppName
     vnetResourceGroup: vnetResourceGroup
     vnetName: vnetName
     vnetSubnetName: privateEndpointSubnetName
@@ -188,7 +176,7 @@ module keyVault '../../Defra.Infrastructure.Common/templates/Microsoft.KeyVault/
     vaultName: vaultName
     location: location
     tenantId: tenantId
-    privateEndpointName: privateEndpointNameKv
+    privateEndpointName: 'priv-endpoint-${vaultName}'
     vnetResourceGroup: vnetResourceGroup
     vnetName: vnetName
     vnetSubnetName: privateEndpointSubnetName

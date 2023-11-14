@@ -3,7 +3,6 @@ param webAppName string
 param location string = resourceGroup().location
 param webAppVnetSubnetId string 
 param defaultTags object 
-param privateEndpointName string = 'wallthewebappprivateendpoint2'
 param vnetResourceGroup string 
 param vnetName string 
 param vnetSubnetName string
@@ -89,8 +88,12 @@ module acrPrivateEndpoint 'privateEndpoints.bicep' = if (disablePublicAccess) {
   params: {
     location: location
     groupName: 'sites'
-    privateEndpointName: privateEndpointName
+    privateEndpointName: 'priv-endpoint-${webAppName}'
     resourceId: webApp.id
     subnetResourceId: '${resourceId(vnetResourceGroup, 'Microsoft.Network/virtualNetworks', vnetName)}/subnets/${vnetSubnetName}'
   }
 }
+
+output webAppIdentityObjId string = webApp.identity.principalId
+
+

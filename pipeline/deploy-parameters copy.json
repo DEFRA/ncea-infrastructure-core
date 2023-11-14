@@ -40,6 +40,9 @@
     "tenantId": {
       "value": "770a2450-0227-4c62-90c7-4e38537f1102"
     },
+    "privateEndpointNameKv": {
+      "value": "priv-endpoint-keyvault"
+    },
     "kvSku": {
       "value": {
         "name": "standard",
@@ -87,6 +90,9 @@
     "webAppNameApi": {
       "value": "nceapoc-snd-apiwebapp"
     },
+    "privateEndpointApiWebAppName": {
+      "value": "priv-endpoint-apiwebapp"
+    },
     "webAppNameApiDisablePublicAccess": {
       "value": true
     },
@@ -98,6 +104,9 @@
     },
     "webAppNameFront": {
       "value": "nceapoc-snd-frontwebapp"
+    },
+    "privateEndpointFrontWebAppName": {
+      "value": "priv-endpoint-frontwebapp"
     },
     "cogSearchInstanceName": {
       "value": "nceapoc-snd-cogsearch"

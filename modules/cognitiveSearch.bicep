@@ -44,7 +44,6 @@ param disablePublicAccess bool
 param vnetResourceGroup string 
 param vnetName string 
 param privateEndpointSubnetName string
-param privateEndpointName string
 param defaultTags object 
 param publicNetworkAccessEnabled string = 'Disabled'
 @allowed([
@@ -77,8 +76,10 @@ module acrPrivateEndpoint 'privateEndpoints.bicep' = if (disablePublicAccess) {
   params: {
     location: location
     groupName: 'searchService'
-    privateEndpointName: privateEndpointName
+    privateEndpointName: 'priv-endpoint-${cogSearchInstanceName}'
     resourceId: cogSearch.id
     subnetResourceId: '${resourceId(vnetResourceGroup, 'Microsoft.Network/virtualNetworks', vnetName)}/subnets/${privateEndpointSubnetName}'
   }
 }
+
+output cogSearchIdentityObjId string = cogSearch.identity.principalId
