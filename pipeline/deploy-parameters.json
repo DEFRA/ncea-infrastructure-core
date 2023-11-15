@@ -51,7 +51,7 @@
     },
     "cosmosCollectionName": {
       "value": "ncea-metadata"
-    },    
+    },
     "cosmosPartitionKey": {
       "value": "/id"
     },
@@ -129,7 +129,31 @@
     },
     "dataFactoryDisablePublicAccess": {
       "value": true
+    },
+    "storageAccountName": {
+      "value": "nceapocsndstorageac1"
+    },
+    "storageAccountSku": {
+      "value": "Standard_LRS"
+    },
+    "storageAccountZoneRedundancy": {
+      "value": false
+    },
+    "storageAccountBlobContainers": {
+      "value": [
+        {
+          "name": "ncea-datadrop"
+        }
+      ]
+    },
+    "redisCacheName": {
+      "value": "nceapoc-snd-rediscache"
+    },
+    "redisCacheSkuName": {
+      "value": "Basic"
+    },
+    "redisCacheCapacity": {
+      "value": 1
     }
   }
 }
-

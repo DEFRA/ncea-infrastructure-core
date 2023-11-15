@@ -45,21 +45,29 @@ param cogSearchInstanceName string
 //data factory params
 param dataFactoryName string
 param dataFactoryDisablePublicAccess bool
+//Storage account params
+param storageAccountName string
+param storageAccountSku string
+param storageAccountBlobContainers array
+param storageAccountZoneRedundancy bool
+// Redis Cache Params
+param redisCacheName string
+param redisCacheSkuName string
+param redisCacheCapacity int
 
 // TO DO
 // TIDY PARAMS UP
 // Delegate subnet to Microsoft.Web * Delegate subnet to a service 'Microsoft.Web/serverFarms' CAN BE MANUAL for lab
 // Blob storage 
 // Redis cache
-// Create cosmos collection
 // Allow access to cosmos from the portal
 // Automate indexing of Cosmos db with cognitive search
 // Make disabled public access conditional based on param
-// Enabled managed identity on all resources - will need to fork cosmos and container reg
 // Populate KeyVault:
 // 1. Cosmos connection strings
 // 2. Managed identities need RBAC permission of 'Key Vault Secrets User' ID = 4633458b-17de-408a-b874-0445c86b69e6
 // 2.Cont. Web App identities, cosmos db, data factory,
+// REDIS add managed identity to Data Access Configuration
 
 // GET RESOURCE ID OF CENTRAL LOG ANALYTICS
 
@@ -72,6 +80,70 @@ resource logAnalyticsInstance 'Microsoft.OperationalInsights/workspaces@2022-10-
 resource webAppSubnet 'Microsoft.Network/virtualNetworks/subnets@2020-05-01' existing = {
   scope: resourceGroup(vnetResourceGroup) 
   name: '${vnetName}/${webAppSubnetName}'
+}
+
+module redisCache 'br/public:storage/redis-cache:2.0.1' = {
+  name: 'redisCache'
+  params: {
+    location: location
+    name: redisCacheName
+    tags: defaultTags
+    skuName: redisCacheSkuName
+    minimumTlsVersion: '1.2'
+    capacity: redisCacheCapacity
+    publicNetworkAccess: 'Disabled'
+  }
+}
+
+module redisCachePrivEndpoint '../modules/privateEndpoints.bicep' = {
+  name: 'redisCachePrivEndpoint'
+  params: {
+    groupName: 'redisCache'
+    location: location
+    privateEndpointName: 'priv-endpoint-${redisCacheName}'
+    resourceId: redisCache.outputs.resourceId
+    subnetResourceId: '${resourceId(vnetResourceGroup, 'Microsoft.Network/virtualNetworks', vnetName)}/subnets/${privateEndpointSubnetName}'
+  }
+  dependsOn: [
+    redisCache
+  ]
+}
+
+module storageAccount 'br/public:storage/storage-account:3.0.1' = {
+  name: 'storageAccount'
+  params: {
+    name: storageAccountName
+    location: location
+    tags: defaultTags
+    sku: storageAccountSku
+    isZoneRedundant: storageAccountZoneRedundancy
+    identityType: 'SystemAssigned' 
+    allowBlobPublicAccess: false
+    minimumTlsVersion: 'TLS1_2'
+    blobContainers: storageAccountBlobContainers
+    supportHttpsTrafficOnly: true
+    allowSharedKeyAccess: false
+    enablePublicNetworkAccess: false
+    kind: 'StorageV2'
+    routingPreference: {
+      routingChoice: 'MicrosoftRouting'}
+  }
+}
+
+output storageAccountID string = storageAccount.outputs.id
+
+module storageAccountPrivEndpoint '../modules/privateEndpoints.bicep' = {
+  name: 'storageAccountPrivEndpoint'
+  params: {
+    groupName: 'blob'
+    location: location
+    privateEndpointName: 'priv-endpoint-${storageAccountName}'
+    resourceId: storageAccount.outputs.id
+    subnetResourceId: '${resourceId(vnetResourceGroup, 'Microsoft.Network/virtualNetworks', vnetName)}/subnets/${privateEndpointSubnetName}'
+  }
+  dependsOn: [
+    storageAccount
+  ]
 }
 
 module appInsights '../modules/applicationInsights.bicep' = {
