@@ -12,11 +12,6 @@ param cosmosCapabilities array
 @minLength(3)
 param accountName string
 
-@description('Cosmos DB account name (must contain only lowercase letters, digits, and hyphens)')
-@maxLength(44)
-@minLength(3)
-param databaseName string
-
 @allowed([
   'Eventual'
   'ConsistentPrefix'
@@ -99,17 +94,6 @@ resource databaseAccount 'Microsoft.DocumentDB/databaseAccounts@2023-09-15' = {
     publicNetworkAccess: (enablePublicAccess ? 'Enabled' : 'Disabled')
     minimalTlsVersion: 'Tls12'
     capabilities:cosmosCapabilities
-  }
-}
-
-resource cosmosDatabase 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2023-09-15' = {
-  name: databaseName
-  parent: databaseAccount
-  properties: {
-    options: {}
-    resource: {
-      id: databaseName
-    }
   }
 }
 

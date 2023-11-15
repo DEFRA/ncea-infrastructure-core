@@ -47,7 +47,13 @@
       "value": "nceapoc-snd-cosmosdb"
     },
     "cosmosDatabaseName": {
-      "value": "ncea-metadata-test"
+      "value": "ncea-metadata"
+    },
+    "cosmosCollectionName": {
+      "value": "ncea-metadata"
+    },    
+    "cosmosPartitionKey": {
+      "value": "/id"
     },
     "cosmosConsistencyLevel": {
       "value": "Session"
@@ -120,6 +126,9 @@
     },
     "dataFactoryName": {
       "value": "nceapoc-snd-datafactory"
+    },
+    "dataFactoryDisablePublicAccess": {
+      "value": true
     }
   }
 }

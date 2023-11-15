@@ -17,7 +17,10 @@ param cosmosConsistencyLevel string
 param cosmosPrivateEndpoint object
 param cosmosCapabilities array //required to be set for serverless
 param cosmosLocations array
+// Cosmos collection params
 param cosmosDatabaseName string
+param cosmosCollectionName string
+param cosmosPartitionKey string
 //param secondaryRegion string
 param logAnalyticsInstanceName string
 param logAnalyticsInstanceRg string
@@ -41,15 +44,15 @@ param cogSearchDisablePublicAccess bool
 param cogSearchInstanceName string
 //data factory params
 param dataFactoryName string
+param dataFactoryDisablePublicAccess bool
 
 // TO DO
 // TIDY PARAMS UP
 // Delegate subnet to Microsoft.Web * Delegate subnet to a service 'Microsoft.Web/serverFarms' CAN BE MANUAL for lab
 // Blob storage 
 // Redis cache
-// cosmos - update template to allow serverless option - done
-// Improve naming to reduce params
 // Create cosmos collection
+// Allow access to cosmos from the portal
 // Automate indexing of Cosmos db with cognitive search
 // Make disabled public access conditional based on param
 // Enabled managed identity on all resources - will need to fork cosmos and container reg
@@ -87,7 +90,7 @@ module dataFactory '../modules/dataFactory.bicep' = {
     dataFactoryName: dataFactoryName
     location: location
     defaultTags: defaultTags
-    disablePublicAccess: cogSearchDisablePublicAccess //CORRECT PARAMS
+    disablePublicAccess: dataFactoryDisablePublicAccess // set true for private endpoint
     vnetResourceGroup: vnetResourceGroup
     vnetName: vnetName
     privateEndpointSubnetName: privateEndpointSubnetName
@@ -100,7 +103,7 @@ module cogSearch '../modules/cognitiveSearch.bicep' = {
     cogSearchInstanceName: cogSearchInstanceName
     location: location
     defaultTags: defaultTags
-    disablePublicAccess: cogSearchDisablePublicAccess
+    disablePublicAccess: cogSearchDisablePublicAccess // set true for private endpoint
     vnetResourceGroup: vnetResourceGroup
     vnetName: vnetName
     privateEndpointSubnetName: privateEndpointSubnetName
@@ -119,7 +122,7 @@ module webAppApi '../modules/webApp.bicep' = {
     vnetName: vnetName
     vnetSubnetName: privateEndpointSubnetName
     applicationInsightsConnString: appInsights.outputs.applicationInsightsConnString
-    disablePublicAccess: webAppNameApiDisablePublicAccess
+    disablePublicAccess: webAppNameApiDisablePublicAccess // set true for private endpoint
     publicNetworkAccess: publicNetworkAccess
   }
 }
@@ -136,7 +139,7 @@ module webAppFront '../modules/webApp.bicep' = {
     vnetName: vnetName
     vnetSubnetName: privateEndpointSubnetName
     applicationInsightsConnString: appInsights.outputs.applicationInsightsConnString
-    disablePublicAccess: webAppNameApiDisablePublicAccess
+    disablePublicAccess: webAppNameApiDisablePublicAccess // set true for private endpoint
     publicNetworkAccess: publicNetworkAccess
   }
   dependsOn: [
@@ -166,7 +169,7 @@ module registry '../../Defra.Infrastructure.Common/templates/Microsoft.Container
     privateEndpointName: 'priv-endpoint-${acrName}'
     vnetResourceGroup: vnetResourceGroup
     vnetName: vnetName
-    vnetSubnetName: privateEndpointSubnetName
+    vnetSubnetName: privateEndpointSubnetName // set true for private endpoint
     customTags: customTags
     defaultTags: defaultTags
   }
@@ -181,17 +184,29 @@ module keyVault '../../Defra.Infrastructure.Common/templates/Microsoft.KeyVault/
     privateEndpointName: 'priv-endpoint-${vaultName}'
     vnetResourceGroup: vnetResourceGroup
     vnetName: vnetName
-    vnetSubnetName: privateEndpointSubnetName
+    vnetSubnetName: privateEndpointSubnetName 
     customTags: customTags
     sku: kvSku
   }
+}
+
+module cosmosDbCollection '../modules/cosmosDbContainers.bicep' = {
+  name: 'cosmosDbCollection'
+  params: {
+    databaseName: cosmosDatabaseName
+    collectionName: cosmosCollectionName
+    databaseAccount: cosmosAccountName
+    partitionKey: cosmosPartitionKey
+  }
+  dependsOn:[
+    cosmosDb
+  ]
 }
 
 module cosmosDb '../modules/cosmosDb.bicep' = {
   name: 'cosmosDb'
   params: {
     accountName: cosmosAccountName
-    databaseName: cosmosDatabaseName
     location: location
     defaultConsistencyLevel: cosmosConsistencyLevel
     customTags: customTags
@@ -199,7 +214,7 @@ module cosmosDb '../modules/cosmosDb.bicep' = {
     cosmosLocations:cosmosLocations
     environment: environment
     privateEndpoint: cosmosPrivateEndpoint
-    cosmosCapabilities:cosmosCapabilities
+    cosmosCapabilities:cosmosCapabilities 
   }
 }
 
