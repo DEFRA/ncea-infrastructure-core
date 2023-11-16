@@ -56,13 +56,12 @@ param redisCacheSkuName string
 param redisCacheCapacity int
 
 // TO DO
-// TIDY PARAMS UP
-// Delegate subnet to Microsoft.Web * Delegate subnet to a service 'Microsoft.Web/serverFarms' CAN BE MANUAL for lab
-// Blob storage 
-// Redis cache
+// VNET not included. Require a private endpoint and app service subnet.
+// Delegate appservice subnet to Microsoft.Web *Delegate app service subnet to 'Microsoft.Web/serverFarms' CAN BE MANUAL for lab
 // Allow access to cosmos from the portal
 // Automate indexing of Cosmos db with cognitive search
 // Make disabled public access conditional based on param
+// RBAC : ensure the following identities
 // Populate KeyVault:
 // 1. Cosmos connection strings
 // 2. Managed identities need RBAC permission of 'Key Vault Secrets User' ID = 4633458b-17de-408a-b874-0445c86b69e6
@@ -231,7 +230,7 @@ module appServicePlan '../modules/appServicePlan.bicep' = {
   }
 }
 
-module registry '../../Defra.Infrastructure.Common/templates/Microsoft.ContainerRegistry/registries.bicep' = {
+module registry '../modules/containerRegistries.bicep' = {
   name: 'containerRegistry'
   params: {
     acrName: acrName
@@ -247,7 +246,7 @@ module registry '../../Defra.Infrastructure.Common/templates/Microsoft.Container
   }
 }
 
-module keyVault '../../Defra.Infrastructure.Common/templates/Microsoft.KeyVault/vaults.bicep' = {
+module keyVault '../modules/keyVaults.bicep' = {
   name: 'keyVault'
   params: {
     vaultName: vaultName
