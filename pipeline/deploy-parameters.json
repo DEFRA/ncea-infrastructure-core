@@ -93,8 +93,8 @@
     },
     "appServicePlanSku": {
       "value": {
-        "Tier": "Standard",
-        "Name": "S1"
+        "Tier": "Basic",
+        "Name": "B2"
       }
     },
     "appServicePlanName": {
