@@ -1,7 +1,0 @@
-C:\training\204-webapp\azurewebapptest\obj\Docker\publish\azurewebapptest.exe
-C:\training\204-webapp\azurewebapptest\obj\Docker\publish\appsettings.Development.json
-C:\training\204-webapp\azurewebapptest\obj\Docker\publish\appsettings.json
-C:\training\204-webapp\azurewebapptest\obj\Docker\publish\azurewebapptest.dll
-C:\training\204-webapp\azurewebapptest\obj\Docker\publish\azurewebapptest.deps.json
-C:\training\204-webapp\azurewebapptest\obj\Docker\publish\azurewebapptest.runtimeconfig.json
-C:\training\204-webapp\azurewebapptest\obj\Docker\publish\azurewebapptest.pdb
