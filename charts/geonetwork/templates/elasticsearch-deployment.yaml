@@ -1,0 +1,70 @@
+{{- if .Values.create_elasticsearch_pod }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $.Values.elasticsearch.name }}
+  annotations:
+    geonetwork-ncea.version: {{ .Chart.Version }}
+  labels:
+      geonetwork-ncea/app: {{ $.Values.elasticsearch.name }}
+      geonetwork-ncea/siteName: {{ .Release.Name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      geonetwork-ncea/app: {{ $.Values.elasticsearch.name }}
+      geonetwork-ncea/siteName: {{ .Release.Name }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        geonetwork-ncea/app: {{ $.Values.elasticsearch.name }}
+        geonetwork-ncea/siteName: {{ .Release.Name }}
+    spec:
+    {{- with .Values.esimagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.esimage.repository }}:{{ .Values.esimage.tag }}"
+          imagePullPolicy: {{ .Values.esimage.pullPolicy }}
+          env:
+            - name: ES_JAVA_OPTS
+              value: -Xms1G -Xmx1G
+            - name: discovery.type
+              value: single-node
+          ports:
+            - name: tcp
+              containerPort: 9200
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - mountPath: "/usr/share/elasticsearch/data"
+              name: esdata
+      restartPolicy: Always
+      volumes:
+        - name: esdata
+          persistentVolumeClaim:
+            claimName: {{ .Values.espvc.elasticsearchPvcName }}
+
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+
+{{- end}}

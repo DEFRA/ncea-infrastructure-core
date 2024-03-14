@@ -1,0 +1,100 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "geonetwork.fullname" . }}
+  annotations:
+    geonetwork.version: {{ .Chart.Version }}
+  labels:
+    azure.workload.identity/use: "true"
+{{ include "geonetwork.labels" . | indent 4 }}
+spec:
+  replicas: {{ .Values.georeplicaCount }}
+  selector:
+    matchLabels:
+      geonetwork/app: {{ include "geonetwork.name" . }}
+      geonetwork/siteName: {{ .Release.Name }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        geonetwork/app: {{ include "geonetwork.name" . }}
+        geonetwork/siteName: {{ .Release.Name }}
+    spec:
+      serviceAccountName: {{ .Values.identity.serviceAccountName }}
+    {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      securityContext:
+        runAsUser: 999
+        runAsGroup: 999
+        fsGroup: 999
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.geoimage.repository }}:{{ .Values.geoimage.tag }}"
+          imagePullPolicy: {{ .Values.geoimage.pullPolicy }}
+          env:
+            - name: DATA_DIR
+              value: /catalogue-data
+            - name: ES_HOST
+              value: {{ .Values.elasticsearch.host }}
+            - name: ES_PORT
+              value: "{{ .Values.elasticsearch.port }}"
+            - name: ES_PROTOCOL
+              value: {{ .Values.elasticsearch.protocol }}
+            - name: GEONETWORK_DB_HOST
+              value: {{ .Values.postgres.host }}
+            - name: GEONETWORK_DB_NAME
+              value: {{ .Values.postgres.dbname }}
+            - name: GEONETWORK_DB_PASSWORD
+              value: {{ .Values.postgres.password }}
+            - name: GEONETWORK_DB_PORT
+              value: "{{ .Values.postgres.port }}"
+            - name: GEONETWORK_DB_TYPE
+              value: {{ .Values.db_type }}
+            - name: GEONETWORK_DB_USERNAME
+              value: {{ .Values.postgres.dbuser }}
+            - name: JAVA_OPTS
+              value: |
+                -Dorg.eclipse.jetty.annotations.AnnotationParser.LEVEL=OFF -Djava.security.egd=file:/dev/./urandom -Djava.awt.headless=true -Xms512M -Xss512M -Xmx2G -XX:+UseConcMarkSweepGC -Dgeonetwork.resources.dir=/catalogue-data/resources -Dgeonetwork.data.dir=/catalogue-data -Dgeonetwork.codeList.dir=/var/lib/jetty/webapps/geonetwork/WEB-INF/data/config/codelist -Dgeonetwork.schema.dir=/var/lib/jetty/webapps/geonetwork/WEB-INF/data/config/schema_plugins
+          ports:
+            - name: tcp
+              containerPort: 8080
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - mountPath: /catalogue-data
+              name: geonetwork            
+            - mountPath: /metadata-import
+              name: geonetworkmetadata
+            - mountPath: "/mnt/secrets-store"
+              name: kvmount
+              readOnly: true
+      restartPolicy: Always
+      volumes:
+        - name: geonetwork
+          persistentVolumeClaim:
+            claimName: {{ .Values.pvc.geoCataloguePvcName }}
+        - name: geonetworkmetadata
+          persistentVolumeClaim:
+            claimName: {{ .Values.pvc.geoMetaDataFileShareName }}
+        - name: kvmount
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: {{ .Values.identity.secretProviderClass }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}

@@ -1,0 +1,12 @@
+{{- $global := .Values.global | default dict }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.pvc.geoMetaDataFileShareName }}
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: {{ .Values.pvc.geoMetaDataFileShareSize }}
+  storageClassName: {{ .Values.peSaFileshare.geoMetaDataFileShareScName }}

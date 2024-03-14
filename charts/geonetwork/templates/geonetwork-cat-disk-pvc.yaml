@@ -1,0 +1,13 @@
+{{- $global := .Values.global | default dict }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.pvc.geoCataloguePvcName }}
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.pvc.geoCataloguePvcSize }}
+  volumeName: {{ .Values.pv.geoCataloguePvName }}
+  storageClassName: {{ .Values.pvc.geoCatalogueStorageClassName }}
