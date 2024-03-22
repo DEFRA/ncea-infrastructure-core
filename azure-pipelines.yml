@@ -43,9 +43,9 @@ steps:
     azureResourceGroup: $(aksResourceGroupName)
     kubernetesCluster : $(aksClusterName)
     command: lint
-    arguments: 
-    chartPath: '$(Build.SourcesDirectory)/charts/hello-world'
-    valueFile: '$(Build.SourcesDirectory)/charts/hello-world/values.yaml'
+    arguments: '$(Build.SourcesDirectory)/charts/hello-world'
+    # chartPath: '$(Build.SourcesDirectory)/charts/hello-world'
+    # valueFile: '$(Build.SourcesDirectory)/charts/hello-world/values.yaml'
 
 # - task: HelmDeploy@0
 #   displayName: 'Helm Deploy'
