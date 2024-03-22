@@ -17,7 +17,8 @@ steps:
     scriptType: bash
     scriptLocation: inlineScript
     inlineScript: |
-      az acr login $(acr)
+      az account set --subscription "AZR-NCE-DEV1"
+      az acr login -n $(acr)
 
 
 
