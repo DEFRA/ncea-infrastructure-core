@@ -24,18 +24,6 @@ steps:
   displayName: 'pwd'
 
 - task: HelmDeploy@0
-  displayName: Helm list
-  inputs:
-    connectionType: Azure Resource Manager
-    azureSubscriptionEndpoint: $(azureServiceConnection)
-    azureResourceGroup: $(aksResourceGroupName)
-    kubernetesCluster : $(aksClusterName)
-    command: ls
-    # arguments: -n geonetwork
-
-
-
-- task: HelmDeploy@0
   displayName: Helm lint
   inputs:
     connectionType: Azure Resource Manager
@@ -47,7 +35,18 @@ steps:
     # chartPath: '$(Build.SourcesDirectory)/charts/hello-world'
     # valueFile: '$(Build.SourcesDirectory)/charts/hello-world/values.yaml'
 
-# - task: HelmDeploy@0
+- task: HelmDeploy@0
+  displayName: Helm list
+  dependsOn: [Helm lint]
+  inputs:
+    connectionType: Azure Resource Manager
+    azureSubscriptionEndpoint: $(azureServiceConnection)
+    azureResourceGroup: $(aksResourceGroupName)
+    kubernetesCluster : $(aksClusterName)
+    command: ls
+    # arguments: -n geonetwork
+
+    # - task: HelmDeploy@0
 #   displayName: 'Helm Deploy'
 #   condition: succeeded()
 #   inputs:
