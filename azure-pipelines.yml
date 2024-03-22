@@ -19,7 +19,7 @@ steps:
     kubeloginVersion: 'latest'
 
 - script: |
-    pwd 
+    echo $(Build.SourcesDirectory) 
   displayName: 'pwd'
 
 - task: HelmDeploy@0
