@@ -28,6 +28,8 @@ steps:
       az account set --subscription "AZR-NCE-DEV1"
       PASSWORD=$(az acr login --name $(acr) --expose-token --output tsv --query accessToken)
       docker login $(acr) -u $(acrUser) -p $PASSWORD
+      docker build -t '$(acr)/test:$(tag)'
+      docker push '$(acr)/test:$(tag)'
 
 
 
