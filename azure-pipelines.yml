@@ -1,7 +1,7 @@
 trigger: none
 
 variables: 
-  - template: templates/variables-global.yml
+  # - template: templates/variables-global.yml
   - name : acrContainerRegistryServiceConnection
     value: acr-AZR-NCE-DEV-TEMP
   - name: azureServiceConnection
