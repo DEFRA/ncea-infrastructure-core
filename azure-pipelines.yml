@@ -1,0 +1,83 @@
+trigger: none
+
+variables: 
+  - template: templates/variables-global.yml
+  - name : acrContainerRegistryServiceConnection
+    value: acr-AZR-NCE-DEV-TEMP
+  - name: azureServiceConnection
+    value: AZR-NCE-DEV1
+  - group: azureVariables-dev
+  - group: geoNetworkAppVariables-dev
+
+pool:
+  name: DEFRA-COMMON-ubuntu2204-SSV3
+
+steps:
+
+- task: KubeloginInstaller@0
+  inputs:
+    kubeloginVersion: 'latest'
+
+- script: |
+    ls 
+  displayName: 'ls'
+
+- task: HelmDeploy@0
+  displayName: Helm list
+  inputs:
+    connectionType: Azure Resource Manager
+    azureSubscriptionEndpoint: $(azureServiceConnection)
+    azureResourceGroup: $(aksResourceGroupName)
+    kubernetesCluster : $(aksClusterName)
+    command: ls
+    arguments: -n geonetwork
+
+
+
+- task: HelmDeploy@0
+  displayName: Helm lint
+  inputs:
+    connectionType: Azure Resource Manager
+    azureSubscriptionEndpoint: $(azureServiceConnection)
+    azureResourceGroup: $(aksResourceGroupName)
+    kubernetesCluster : $(aksClusterName)
+    command: lint
+    arguments: 
+    chartPath: '$(Build.SourcesDirectory)/charts/geonetwork'
+    valueFile: $(Build.SourcesDirectory)/charts/geonetwork/values.yaml
+
+# - task: HelmDeploy@0
+#   displayName: 'Helm Deploy'
+#   condition: succeeded()
+#   inputs:
+#     connectionType: Azure Resource Manager
+#     azureSubscriptionEndpoint: $(azureServiceConnection)
+#     azureResourceGroup: $(aksResourceGroupName)
+#     kubernetesCluster : $(aksClusterName)
+#     releaseName: "geonetwork-helm-deploy"
+#     namespace: $(aksNamespaceGeoNetwork)
+#     command: 'upgrade'
+#     chartType: 'FilePath'
+#     chartPath: '$(Build.SourcesDirectory)/charts/geonetwork'
+#     chartVersion: "1.1.2"
+#     valueFile: $(Build.SourcesDirectory)/charts/geonetwork/values.yaml
+#     overrideValues: |
+#         geoimage.repository="devnceinfcr1401.azurecr.io/geonetwork428"
+#         geoimage.tag="latest"
+#         ingress.host=$(ingressHostname)
+#         postgres.host=$(postgresHostname)
+#         postgres.dbuser=$(postgresDbUser)
+#         postgres.password=$(postgresDbPassword)
+#         postgres.dbname=$(postgresDbName)
+#         esimage.repository=$(elasticContainerRepositoryFullPath)
+#         pv.geoCataloguePvDiskResourceId=$(geoCataloguePvDiskResourceId)
+#         peSaFileshare.storageAccountResourceGroup=$(storageAccountResourceGroup)
+#         peSaFileshare.storageAccountName=$(storageAccountName)
+#         peSaFileshare.storageAccountFilePrivateEndpointFqdn=$(storageAccountFilePrivateEndpointFqdn)
+#         identity.serviceAccountName=$(serviceAccountGeonetwork)
+#         identity.clientId=$(managedIdentityClientIdGeonetwork)
+#         identity.tenantId=$(tenantId)
+#         identity.keyvaultName=$(keyvaultName)
+#     install: true
+#     force: true
+#     arguments: --timeout=30m --debug
