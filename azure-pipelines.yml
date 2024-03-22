@@ -19,8 +19,8 @@ steps:
     kubeloginVersion: 'latest'
 
 - script: |
-    ls 
-  displayName: 'ls'
+    pwd 
+  displayName: 'pwd'
 
 - task: HelmDeploy@0
   displayName: Helm list
