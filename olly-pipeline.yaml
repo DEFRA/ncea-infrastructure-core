@@ -11,6 +11,8 @@ variables:
     value: '$(Build.SourcesDirectory)/app/Dockerfile'
   - name: tag
     value: '$(Build.BuildId)'
+  - name: acrUser
+    value: "00000000-0000-0000-0000-000000000000"
 
 pool:
   name: DEFRA-COMMON-ubuntu2204-SSV3
@@ -24,17 +26,10 @@ steps:
     scriptLocation: inlineScript
     inlineScript: |
       az account set --subscription "AZR-NCE-DEV1"
-      az acr login -n $(acr)
+      PASSWORD=$(az acr login --name $(acr) --expose-token --output tsv --query accessToken)
+      docker login $(acr) -u $(acrUser) -p $PASSWORD
 
-- task: Docker@2
-  displayName: Build and publish image to Azure Container Registry
-  inputs:
-    command: buildAndPush
-    containerRegistry: $(acr)
-    repository: $(imageRepository)
-    dockerfile: $(dockerfilePath)
-    tags: |
-      $(tag)
+
 
 
 
