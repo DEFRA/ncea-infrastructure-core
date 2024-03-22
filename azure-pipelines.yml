@@ -30,7 +30,7 @@ steps:
     azureResourceGroup: $(aksResourceGroupName)
     kubernetesCluster : $(aksClusterName)
     command: ls
-    arguments: -n geonetwork
+    # arguments: -n geonetwork
 
 
 
@@ -43,8 +43,8 @@ steps:
     kubernetesCluster : $(aksClusterName)
     command: lint
     arguments: 
-    chartPath: '$(Build.SourcesDirectory)/charts/geonetwork'
-    valueFile: $(Build.SourcesDirectory)/charts/geonetwork/values.yaml
+    chartPath: '$(Build.SourcesDirectory)/charts/hello-world'
+    valueFile: '$(Build.SourcesDirectory)/charts/hello-world/values.yaml'
 
 # - task: HelmDeploy@0
 #   displayName: 'Helm Deploy'
