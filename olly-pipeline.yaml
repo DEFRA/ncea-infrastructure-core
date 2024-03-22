@@ -1,0 +1,25 @@
+trigger: none
+
+variables: 
+  - name : acr
+    value: devnceinfcr1401.azurecr.io
+  - name: azureServiceConnection
+    value: AZR-NCE-DEV1
+
+pool:
+  name: DEFRA-COMMON-ubuntu2204-SSV3
+
+steps:
+
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: $(azureServiceConnection)
+    scriptType: bash
+    scriptLocation: inlineScript
+    inlineScript: |
+      az acr login $(acr)
+
+
+
+
+
