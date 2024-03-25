@@ -16,6 +16,7 @@ steps:
 
 - task: AzureCLI@2
   inputs:
+    displayName: DockerBuildAndPush
     azureSubscription: $(azureServiceConnection)
     scriptType: bash
     scriptLocation: inlineScript
@@ -26,7 +27,15 @@ steps:
       docker build -t '$(containerRegistry)/test:$(tag)' -f $(dockerfilePath) .
       docker push '$(containerRegistry)/test:$(tag)'
 
-
+- task: AzureCLI@2
+  inputs:
+    displayName: queryAks
+    azureSubscription: $(azureServiceConnection)
+    scriptType: bash
+    scriptLocation: inlineScript
+    inlineScript: |
+      az aks get-credentials --resource-group $(storageAccountResourceGroup)  --name $(aksInstanceName)
+      kubectl get nodes
 
 
 
