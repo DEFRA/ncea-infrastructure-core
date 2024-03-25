@@ -12,7 +12,6 @@ variables:
 pool:
   name: DEFRA-COMMON-ubuntu2204-SSV3
 
-stage:
 steps:
 
 - task: KubeloginInstaller@0
