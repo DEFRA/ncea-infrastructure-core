@@ -27,6 +27,10 @@ steps:
       docker build -t '$(containerRegistry)/test:$(tag)' -f $(dockerfilePath) .
       docker push '$(containerRegistry)/test:$(tag)'
 
+- task: KubeloginInstaller@0
+  inputs:
+    kubeloginVersion: 'latest'
+
 - task: AzureCLI@2
   inputs:
     displayName: queryAks
