@@ -17,9 +17,9 @@
 
 $RegistryName = "sndnceinfcr1401" # without .azurecr.io
 $InstanceCount = 1 # Number of NGINX replicas (lower environments can have 1)
-$LoadBalancerIp = "10.224.0.100" # Ensure IP is free and in the correct range IP for the AKS subnet before proceeding
-$AzSubscription = "AZR-NCE-SND1"
-$aksName = "SNDNCEINFAK1401"
+$LoadBalancerIp = "" # Ensure IP is free and in the correct range IP for the AKS subnet before proceeding
+$AzSubscription = ""
+$aksName = ""
 
 # Interactive authenticatation to Azure
 

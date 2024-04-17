@@ -44,4 +44,4 @@ values.yaml
 
 # Powershell 
 #create-aks-workload-identity.ps1
-deploy-internal-nginx.ps1
+#deploy-internal-nginx.ps1
