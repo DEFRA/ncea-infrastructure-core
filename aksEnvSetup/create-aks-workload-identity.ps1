@@ -14,12 +14,12 @@
 
 #Connect-AzAccount -Subscription "AZR-NCE-SND1"
 
-$geoNamespace ="geonetwork"
-$frontNamespace = "nceafrontend"
-$geoIdentity = "SNDNCEINFID1405"
-$aksName = "SNDNCEINFAK1401"
-$aksRg = "NCEA-NW-POC" # managed identities should already exist in this resource group. 
-$identities = "SNDNCEINFID1401","SNDNCEINFID1402","SNDNCEINFID1403","SNDNCEINFID1404","SNDNCEINFID1405","SNDNCEINFID1406"
+$geoNamespace =""
+$frontNamespace = ""
+$geoIdentity = ""
+$aksName = ""
+$aksRg = "" # managed identities should already exist in this resource group. 
+$identities = "","","","","",""
 
 # Create identities
 
