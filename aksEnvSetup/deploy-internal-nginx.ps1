@@ -15,7 +15,7 @@
 
 ## Set these vairables for the correct environment
 
-$RegistryName = "sndnceinfcr1401" # without .azurecr.io
+$RegistryName = "" # without .azurecr.io
 $InstanceCount = 1 # Number of NGINX replicas (lower environments can have 1)
 $LoadBalancerIp = "" # Ensure IP is free and in the correct range IP for the AKS subnet before proceeding
 $AzSubscription = ""
