@@ -1,0 +1,37 @@
+trigger: none
+
+variables: 
+  - name : acr
+    value: devnceinfcr1401.azurecr.io
+  - name: azureServiceConnection
+    value: AZR-NCE-DEV1
+  - name: imageRepository
+    value: 'test'
+  - name: dockerfilePath
+    value: '$(Build.SourcesDirectory)/app/Dockerfile'
+  - name: tag
+    value: '$(Build.BuildId)'
+  - name: acrUser
+    value: "00000000-0000-0000-0000-000000000000"
+
+pool:
+  name: DEFRA-COMMON-ubuntu2204-SSV3
+
+steps:
+
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: $(azureServiceConnection)
+    scriptType: bash
+    scriptLocation: inlineScript
+    inlineScript: |
+      az account set --subscription "AZR-NCE-DEV1"
+      PASSWORD=$(az acr login --name $(acr) --expose-token --output tsv --query accessToken)
+      docker login $(acr) -u $(acrUser) -p $PASSWORD
+      docker build -t '$(acr)/test:$(tag)' -f $(dockerfilePath) .
+      docker push '$(acr)/test:$(tag)'
+
+
+
+
+
