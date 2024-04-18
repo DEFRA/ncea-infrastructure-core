@@ -8,6 +8,8 @@
 	perform the start/stop operation.
     RBAC:
     'Virtual Machine Contributor' on Application Gateway instance for the system assigned managed identity. 
+    'Network Contributor' on Application Gateway instance for the system assigned managed identity. 
+    'reader' on Application Gateway instance for the system assigned managed identity. 
 
 
     .PARAMETER ResourceGroupName
@@ -31,7 +33,7 @@ Param(
 	[String] $ResourceGroupName,
     	[parameter(Mandatory=$true)]
 	[String] $AppGatewayName,
-    [parameter(Mandatory=$true)]
+        [parameter(Mandatory=$true)]
 	[String] $AppGatewaySubscription,
     	[parameter(Mandatory=$true)]
 	[ValidateSet('start','stop')]
@@ -44,8 +46,8 @@ try
 		
 	#System Managed Identity
 	Write-Output "Logging into Azure using System Managed Identity"
-	$AzureContext = (Connect-AzAccount -Identity -Subscription ).context 
-	$AzureContext = Set-AzContext -SubscriptionName $AppGatewaySubscription -DefaultProfile $AzureContext
+	$AzureContext = (Connect-AzAccount -Identity -Subscription $AppGatewaySubscription).context
+	$AzureContext = Set-AzContext -Subscription $AzureContext.subscription -DefaultProfile $AzureContext   
 }
 catch {
 	Write-Error -Message $_.Exception
@@ -57,8 +59,10 @@ switch -CaseSensitive ($Operation)
 {
 	'start'
 	{
-	Write-Output "Starting Application Gateway $AppGatewayName in $ResourceGroupName"
+	Write-Output "Getting Application Gateway $AppGatewayName in $ResourceGroupName"
     $AppGateway=Get-AzApplicationGateway -Name $AppGatewayName -ResourceGroupName $ResourceGroupName
+    #Write-Output $AppGateway
+    Write-Output "Starting Application Gateway $AppGatewayName in $ResourceGroupName"
     Start-AzApplicationGateway -ApplicationGateway $AppGateway
 	}
 	'stop'
