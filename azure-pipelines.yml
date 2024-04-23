@@ -1,4 +1,10 @@
-trigger: none
+name: $(Date:yyyyMMdd)$(Rev:.r)
+
+trigger:
+  branches:
+    include:
+      - main
+      - feature/*
 
 variables: 
   - template: templates/variables-global.yml
