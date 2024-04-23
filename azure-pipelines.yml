@@ -57,6 +57,7 @@ steps:
       echo "Logging into ACR"
       helm registry login $(acrContainerRegistry) --username $(acrUser) --password $PASSWORD
       echo "Change directory"
+      cd charts
       ls
 #      cd '$(Pipeline.Workspace)/charts/'
 #      FILENAME=$(ls)
