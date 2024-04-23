@@ -57,10 +57,11 @@ steps:
       echo "Logging into ACR"
       helm registry login $(acrContainerRegistry) --username $(acrUser) --password $PASSWORD
       echo "Change directory"
-      cd '$(Pipeline.Workspace)/charts/'
-      FILENAME=$(ls)
-      echo "Pushing Helm Chart"
-      helm push $FILENAME 'oci://$(acrContainerRegistry)/helm'
+      ls
+#      cd '$(Pipeline.Workspace)/charts/'
+#      FILENAME=$(ls)
+#      echo "Pushing Helm Chart"
+#      helm push $FILENAME 'oci://$(acrContainerRegistry)/helm'
 
 # - task: KubeloginInstaller@0
 #   inputs:
