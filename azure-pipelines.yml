@@ -58,6 +58,7 @@ steps:
       helm registry login $(acrContainerRegistry) --username $(acrUser) --password $PASSWORD
       echo "Change directory"
       cd $(Pipeline.Workspace)
+      ls
 #      cd '$(Pipeline.Workspace)/charts/'
 #      FILENAME=$(ls)
 #      echo "Pushing Helm Chart"
