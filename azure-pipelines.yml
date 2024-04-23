@@ -32,7 +32,7 @@ steps:
     targetFolder: '$(Build.ArtifactStagingDirectory)/helmartifact/'
 
 - task: PublishPipelineArtifact@1
-  condition: and(succeeded(), or(eq(variables['isMain'], 'true'), eq(variables['isPullRequest'], 'true')))
+  #condition: and(succeeded(), or(eq(variables['isMain'], 'true'), eq(variables['isPullRequest'], 'true')))
   inputs:
     targetPath: '$(Build.ArtifactStagingDirectory)/helmartifact/'
     artifactName: charts
