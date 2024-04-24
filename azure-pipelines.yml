@@ -53,7 +53,7 @@ steps:
     inlineScript: |
       echo "setting Azure Subscription"
       az account set --subscription $(azureServiceConnectionForAcr)
-      PASSWORD=$(az acr token create -n $USER_NAME -r $ACR_NAME --scope-map _repositories_admin --only-show-errors --query "credentials.passwords[0].value" -o tsv)
+      PASSWORD=$(az acr token create -n "helmtoken" -r $(acrContainerRegistry) --scope-map _repositories_admin --only-show-errors --query "credentials.passwords[0].value" -o tsv)
       helm version
       echo "Logging into ACR"
       helm registry login '$(acrContainerRegistry)' --username "helmtoken" --password $PASSWORD --debug
