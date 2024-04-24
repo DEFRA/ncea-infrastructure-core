@@ -60,11 +60,8 @@ steps:
       cd '$(Build.ArtifactStagingDirectory)/helmartifact/'
       FILENAME=$(find . -iname hello-world*.tgz -type f -printf '%P\n')
       echo $FILENAME
-#      cd $(Pipeline.Workspace)
-#      cd '$(Pipeline.Workspace)/charts/'
-#      FILENAME=$(ls)
-#      echo "Pushing Helm Chart"
-#      helm push $FILENAME 'oci://$(acrContainerRegistry)/helm'
+      echo "Pushing Helm Chart"
+      helm push $FILENAME 'oci://$(acrContainerRegistry)/helm'
 
 # - task: KubeloginInstaller@0
 #   inputs:
