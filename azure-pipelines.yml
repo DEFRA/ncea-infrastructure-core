@@ -53,10 +53,10 @@ steps:
     inlineScript: |
       echo "setting Azure Subscription"
       az account set --subscription $(azureServiceConnectionForAcr)
-      PASSWORD=$(az acr login --name $(acrContainerRegistry) --expose-token --output tsv --query accessToken)
+      PASSWORD=$(az acr token create -n $USER_NAME -r $ACR_NAME --scope-map _repositories_admin --only-show-errors --query "credentials.passwords[0].value" -o tsv)
       helm version
       echo "Logging into ACR"
-      helm registry login '$(acrContainerRegistry)' --username $(acrUser) --password $PASSWORD --debug
+      helm registry login '$(acrContainerRegistry)' --username "helmtoken" --password $PASSWORD --debug
       echo "Change directory"
       cd '$(Build.ArtifactStagingDirectory)/helmartifact/'
       FILENAME=$(find . -iname hello-world*.tgz -type f -printf '%P\n')
