@@ -58,7 +58,7 @@ steps:
       helm registry login $(acrContainerRegistry) --username $(acrUser) --password $PASSWORD
       echo "Change directory"
       cd '$(Build.ArtifactStagingDirectory)/helmartifact/'
-      FILENAME=$(find . -iname hello-world*.tgz)
+      FILENAME=$(find . -iname hello-world*.tgz -type f -printf '%P\n')
       echo $FILENAME
 #      cd $(Pipeline.Workspace)
 #      cd '$(Pipeline.Workspace)/charts/'
