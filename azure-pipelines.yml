@@ -54,6 +54,7 @@ steps:
       echo "setting Azure Subscription"
       az account set --subscription $(azureServiceConnectionForAcr)
       PASSWORD=$(az acr login --name $(acrContainerRegistry) --expose-token --output tsv --query accessToken)
+      helm version
       echo "Logging into ACR"
       helm registry login '$(acrContainerRegistry)' --username $(acrUser) --password $PASSWORD --debug
       echo "Change directory"
