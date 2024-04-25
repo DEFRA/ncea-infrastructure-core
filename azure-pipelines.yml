@@ -51,17 +51,16 @@ steps:
     scriptType: bash
     scriptLocation: inlineScript
     inlineScript: |
-      echo "setting Azure Subscription"
       az account set --subscription $(azureServiceConnectionForAcr)
-      PASSWORD=$(az acr token create -n "helmtoken" -r $(acrContainerRegistry) --scope-map _repositories_admin --only-show-errors --query "credentials.passwords[0].value" -o tsv)
+      PASSWORD=$(az acr login --name $(acrContainerRegistry) --expose-token --output tsv --query accessToken)
       echo "Logging into ACR"
-      helm registry login "$(acrContainerRegistry)" --username "helmtoken" --password "$PASSWORD" --debug
+      helm registry login $(acrContainerRegistry) --username "00000000-0000-0000-0000-000000000000" --password $PASSWORD --debug
       echo "Change directory"
       cd "$(Build.ArtifactStagingDirectory)/helmartifact/"
       FILENAME=$(find . -iname hello-world*.tgz -type f -printf '%P\n')
       echo $FILENAME
       echo "Pushing Helm Chart"
-      helm push "$FILENAME" "oci://$(acrContainerRegistry)/helm" --debug
+      helm push hello-world-0.1.0.tgz oci://$(acrContainerRegistry)/helm --debug
 
 # - task: KubeloginInstaller@0
 #   inputs:
