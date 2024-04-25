@@ -62,7 +62,7 @@ steps:
       FILENAME=$(find . -iname hello-world*.tgz -type f -printf '%P\n')
       echo $FILENAME
       echo "Pushing Helm Chart"
-      helm push $FILENAME 'oci://$(acrContainerRegistry)/helm' --debug
+      helm push $FILENAME 'oci://$(acrContainerRegistry)/helm' --debug --insecure-skip-tls-verify
 
 # - task: KubeloginInstaller@0
 #   inputs:
