@@ -11,12 +11,17 @@ variables:
   - template: templates/variables-dev.yml
   - name : azureServiceConnectionForAcr
     value: AZR-NCE-DEV1
-  - name: releaseName
-    value: hello-world
+  # - name: releaseName
+    # value: hello-world
 
 pool:
   name: DEFRA-COMMON-ubuntu2204-SSV3
 
+parameters:
+  - name: releaseName
+    type: string
+    values:
+      - hello-world
 steps:
 
 # - task: HelmDeploy@0
@@ -65,7 +70,7 @@ steps:
     kubernetesCluster : $(aksClusterName)
     namespace: helloworld
     command: 'rollback'
-    arguments: $(releaseName) --timeout=30m --debug
+    arguments: ${{ parameters.releaseName }} --timeout=30m --debug
 
 # - task: PublishPipelineArtifact@1
 #   #condition: and(succeeded(), or(eq(variables['isMain'], 'true'), eq(variables['isPullRequest'], 'true')))
