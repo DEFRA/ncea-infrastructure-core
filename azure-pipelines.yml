@@ -11,6 +11,8 @@ variables:
   - template: templates/variables-dev.yml
   - name : azureServiceConnectionForAcr
     value: AZR-NCE-DEV1
+  - name: releaseName
+    value: hello-world
 
 pool:
   name: DEFRA-COMMON-ubuntu2204-SSV3
@@ -36,10 +38,10 @@ steps:
   condition: succeeded()
   inputs:
     connectionType: Azure Resource Manager
-    azureSubscriptionEndpoint: ${{ parameters.armServiceConnection }}
+    azureSubscriptionEndpoint: $(azureServiceConnectionForAcr)
     azureResourceGroup: $(aksResourceGroupName)
     kubernetesCluster : $(aksClusterName)
-    releaseName: ${{ parameters.releaseName }}
+    releaseName: $(releaseName)
     namespace: helloworld
     command: 'upgrade'
     chartType: 'FilePath'
@@ -54,10 +56,10 @@ steps:
   condition: failed()
   inputs:
     connectionType: Azure Resource Manager
-    azureSubscriptionEndpoint: ${{ parameters.armServiceConnection }}
+    azureSubscriptionEndpoint: $(azureServiceConnectionForAcr)
     azureResourceGroup: $(aksResourceGroupName)
     kubernetesCluster : $(aksClusterName)
-    releaseName: ${{ parameters.releaseName }}
+    releaseName: $(releaseName)
     namespace: helloworld
     command: 'rollback'
     arguments: --timeout=30m --debug
@@ -75,23 +77,23 @@ steps:
 #     buildType: 'current'
 #     artifact: charts
 
-- task: AzureCLI@2
-  displayName: 'Push Helm charts to Dev Acr'
-  inputs:
-    azureSubscription: $(azureServiceConnectionForAcr) 
-    scriptType: bash
-    scriptLocation: inlineScript
-    inlineScript: |
-      az account set --subscription $(azureServiceConnectionForAcr)
-      PASSWORD=$(az acr login --name $(acrContainerRegistry) --expose-token --output tsv --query accessToken)
-      echo "Logging into ACR"
-      echo $PASSWORD | helm registry login $(acrContainerRegistry) --username "00000000-0000-0000-0000-000000000000" --password-stdin
-      echo "Change directory"
-      cd "$(Build.ArtifactStagingDirectory)/helmartifact/"
-      FILENAME=$(find . -iname hello-world*.tgz -type f -printf '%P\n')
-      echo $FILENAME
-      echo "Pushing Helm Chart"
-      helm push hello-world-0.1.0.tgz oci://$(acrContainerRegistry)/helm --debug
+# - task: AzureCLI@2
+#   displayName: 'Push Helm charts to Dev Acr'
+#   inputs:
+#     azureSubscription: $(azureServiceConnectionForAcr) 
+#     scriptType: bash
+#     scriptLocation: inlineScript
+#     inlineScript: |
+#       az account set --subscription $(azureServiceConnectionForAcr)
+#       PASSWORD=$(az acr login --name $(acrContainerRegistry) --expose-token --output tsv --query accessToken)
+#       echo "Logging into ACR"
+#       echo $PASSWORD | helm registry login $(acrContainerRegistry) --username "00000000-0000-0000-0000-000000000000" --password-stdin
+#       echo "Change directory"
+#       cd "$(Build.ArtifactStagingDirectory)/helmartifact/"
+#       FILENAME=$(find . -iname hello-world*.tgz -type f -printf '%P\n')
+#       echo $FILENAME
+#       echo "Pushing Helm Chart"
+#       helm push hello-world-0.1.0.tgz oci://$(acrContainerRegistry)/helm --debug
 
 # - task: KubeloginInstaller@0
 #   inputs:
