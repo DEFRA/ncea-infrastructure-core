@@ -53,7 +53,7 @@ steps:
     valueFile: $(Build.SourcesDirectory)/charts/hello/hello-values.yaml
     install: true
     # force: true
-    arguments: --debug
+    arguments: --debug --create-namespace
   
 - task: HelmDeploy@0
   displayName: 'Helm Rollback'
