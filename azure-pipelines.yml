@@ -20,8 +20,8 @@ pool:
 parameters:
   - name: releaseName
     type: string
-    values:
-      - hello-world
+    default: hello-world
+    
 steps:
 
 # - task: HelmDeploy@0
