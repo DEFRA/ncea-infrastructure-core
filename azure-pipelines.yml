@@ -50,7 +50,7 @@ steps:
     command: 'upgrade'
     chartType: 'FilePath'
     chartPath: '$(Build.SourcesDirectory)/charts/hello'
-    valueFile: $(Build.SourcesDirectory)/charts/hello/values.yaml
+    valueFile: $(Build.SourcesDirectory)/charts/hello/hello-values.yaml
     install: true
     # force: true
     arguments: --debug
