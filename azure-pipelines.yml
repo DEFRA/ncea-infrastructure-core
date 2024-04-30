@@ -33,6 +33,10 @@ steps:
 #     contents: '**.tgz'
 #     targetFolder: '$(Build.ArtifactStagingDirectory)/helmartifact/'
 
+- task: KubeloginInstaller@0
+  inputs:
+    kubeloginVersion: 'latest'
+
 - task: HelmDeploy@0
   displayName: 'Helm Deploy'
   condition: succeeded()
