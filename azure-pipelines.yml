@@ -106,5 +106,6 @@ steps:
 - script: |
     echo $(Build.SourcesDirectory)
     echo $(Pipeline.Workspace)
+    pwd
     ls
   displayName: 'pwd'
