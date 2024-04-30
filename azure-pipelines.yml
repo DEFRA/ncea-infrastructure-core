@@ -37,36 +37,35 @@ steps:
   inputs:
     kubeloginVersion: 'latest'
 
-# - task: HelmDeploy@0
-#   displayName: 'Helm Deploy'
-#   condition: succeeded()
-#   inputs:
-#     connectionType: Azure Resource Manager
-#     azureSubscriptionEndpoint: $(azureServiceConnectionForAcr)
-#     azureResourceGroup: $(aksResourceGroupName)
-#     kubernetesCluster : $(aksClusterName)
-#     releaseName: $(releaseName)
-#     namespace: helloworld
-#     command: 'upgrade'
-#     chartType: 'FilePath'
-#     chartPath: '$(Pipeline.Workspace)/charts/hello'
-#     valueFile: $(Pipeline.Workspace)/charts/hello/values.yaml
-#     install: true
-#     # force: true
-#     arguments: --debug
+- task: HelmDeploy@0
+  displayName: 'Helm Deploy'
+  condition: succeeded()
+  inputs:
+    connectionType: Azure Resource Manager
+    azureSubscriptionEndpoint: $(azureServiceConnectionForAcr)
+    azureResourceGroup: $(aksResourceGroupName)
+    kubernetesCluster : $(aksClusterName)
+    releaseName: $(releaseName)
+    namespace: helloworld
+    command: 'upgrade'
+    chartType: 'FilePath'
+    chartPath: '$(Build.SourcesDirectory)/charts/hello'
+    valueFile: $(Build.SourcesDirectory)/charts/hello/values.yaml
+    install: true
+    # force: true
+    arguments: --debug
   
-# - task: HelmDeploy@0
-#   displayName: 'Helm Rollback'
-#   condition: failed()
-#   inputs:
-#     connectionType: Azure Resource Manager
-#     azureSubscriptionEndpoint: $(azureServiceConnectionForAcr)
-#     azureResourceGroup: $(aksResourceGroupName)
-#     kubernetesCluster : $(aksClusterName)
-#     releaseName: $(releaseName)
-#     namespace: helloworld
-#     command: 'rollback'
-#     arguments: --timeout=30m --debug
+- task: HelmDeploy@0
+  displayName: 'Helm Rollback'
+  condition: failed()
+  inputs:
+    connectionType: Azure Resource Manager
+    azureSubscriptionEndpoint: $(azureServiceConnectionForAcr)
+    azureResourceGroup: $(aksResourceGroupName)
+    kubernetesCluster : $(aksClusterName)
+    namespace: helloworld
+    command: 'rollback'
+    arguments: $(releaseName) --timeout=30m --debug
 
 # - task: PublishPipelineArtifact@1
 #   #condition: and(succeeded(), or(eq(variables['isMain'], 'true'), eq(variables['isPullRequest'], 'true')))
@@ -103,9 +102,9 @@ steps:
 #   inputs:
 #     kubeloginVersion: 'latest'
 
-- script: |
-    echo $(Build.SourcesDirectory)
-    echo $(Pipeline.Workspace)
-    pwd
-    ls
-  displayName: 'pwd'
+# - script: |
+#     echo $(Build.SourcesDirectory)
+#     echo $(Pipeline.Workspace)
+#     pwd
+#     ls
+#   displayName: 'pwd'
