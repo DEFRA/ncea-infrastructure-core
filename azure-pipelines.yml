@@ -50,7 +50,7 @@ steps:
     azureSubscriptionEndpoint: $(azureServiceConnectionForAcr)
     azureResourceGroup: $(aksResourceGroupName)
     kubernetesCluster : $(aksClusterName)
-    releaseName: $(releaseName)
+    releaseName: ${{ parameters.releaseName }}
     namespace: helloworld
     command: 'upgrade'
     chartType: 'FilePath'
