@@ -7,7 +7,7 @@
 # Contributor access on the Azure subscription
 # HELM installed
 # Ensure you have authenticated with azure and set the correct kubernetes context
-# 'az aks get-credentials --resource-group rgname  --name myakscluster'
+# 'az aks get-credentials --resource-group rgname --name myakscluster'
 # 'kubectl config use-context myakscluster'
 
 # TO DO 
@@ -19,11 +19,19 @@ $RegistryName = "" # without .azurecr.io
 $InstanceCount = 1 # Number of NGINX replicas (lower environments can have 1)
 $LoadBalancerIp = "" # Ensure IP is free and in the correct range IP for the AKS subnet before proceeding
 $AzSubscription = ""
+$aksName = ""
 
 # Interactive authenticatation to Azure
+
 Connect-AzAccount -Subscription $AzSubscription
 
+Write-Output "Setting Az Cli subscription to $AzSubscription"
+az account set --subscription $AzSubscription
 # Update helm and add repo
+
+# Set aks context
+Write-Output "Setting AKS context to $aksName"
+kubectl config use-context $aksName
 
 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 helm repo update
@@ -46,9 +54,14 @@ $AcrUrl = (Get-AzContainerRegistry -ResourceGroupName $ResourceGroup -Name $Regi
 
 # Import helm chart to ACR
 
+Write-Output "Importing NGINX Helm chart to $RegistryName"
+
 Import-AzContainerRegistryImage -ResourceGroupName $ResourceGroup -RegistryName $RegistryName -SourceRegistryUri $SourceRegistry -SourceImage "${ControllerImage}:${ControllerTag}" -TargetTag "${ControllerImage}:${ControllerTag}"
 Import-AzContainerRegistryImage -ResourceGroupName $ResourceGroup -RegistryName $RegistryName -SourceRegistryUri $SourceRegistry -SourceImage "${PatchImage}:${PatchTag}" -TargetTag "${PatchImage}:${PatchTag}"
 Import-AzContainerRegistryImage -ResourceGroupName $ResourceGroup -RegistryName $RegistryName -SourceRegistryUri $SourceRegistry -SourceImage "${DefaultBackendImage}:${DefaultBackendTag}" -TargetTag "${DefaultBackendImage}:${DefaultBackendTag}"
+
+
+Write-Output "Installing Helm chart to $aksName"
 
 # Use Helm to deploy an NGINX ingress controller
 helm install ingress-nginx ingress-nginx/ingress-nginx `
