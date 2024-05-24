@@ -1,0 +1,32 @@
+apiVersion: v2
+name: ncea-geonetwork
+description: Helm Chart for GeoNetwork refined for Defra (ncea) plugin v4.2.8
+version: 1.1.7
+appVersion: "0.0.1"
+annotations:
+  artifacthub.io/category: storage
+  artifacthub.io/license: GPL3
+  artifacthub.io/links: |
+    - name: Chart Source
+      url: https://jingking.github.io/geonetwork-k8s/
+    - name: GeoNetwork
+      url: https://github.com/geonetwork/
+    - name: support
+      url: https://github.com/jingking/geonetwork-k8s/issues
+home: https://github.com/geonetwork/
+icon: https://www.osgeo.org/wp-content/uploads/GeoNetwork-1_740x412_acf_cropped.png
+keywords:
+- geonetwork
+- ncea
+- geospatial
+- geodata
+- web
+- postresql
+- postgis
+maintainers:
+- email: ncea@defra.org.uk
+  name: ncea
+  url: https://github.com/jingking/geonetwork-k8s
+sources:
+- https://github.com/jingking/geonetwork-k8s
+- https://github.com/geonetwork
