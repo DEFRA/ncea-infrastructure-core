@@ -9,5 +9,4 @@ spec:
   resources:
     requests:
       storage: {{ .Values.pvc.geoCataloguePvcSize }}
-  volumeName: {{ .Values.pv.geoCataloguePvName }}
   storageClassName: {{ .Values.pvc.geoCatalogueStorageClassName }}
