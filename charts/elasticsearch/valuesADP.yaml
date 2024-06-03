@@ -112,13 +112,14 @@ networkHost: "0.0.0.0"
 
 volumeClaimTemplate:
   accessModes: ["ReadWriteOnce"]
-  storageClassName: ncea-search-dynamic-premium-zrs
+  storageClassName: dynamic-premium-zrs
   resources:
     requests:
       storage: 30Gi
 
 storageClass:
-  storageClassName: ncea-search-dynamic-premium-zrs
+  create: true
+  storageClassName: dynamic-premium-zrs
   storageClassSku: Premium_ZRS
   resourceGroup: sndadpinfrg3401-ncea-search
   reclaimPolicy: Delete
