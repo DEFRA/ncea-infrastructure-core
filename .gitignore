@@ -47,6 +47,8 @@ snd3-values.yaml
 tst-values.yaml
 valuesOrig.yaml
 valuesADP-with-pv.yaml
+sbox3-values.yaml
+valuesSBOX3.yaml
 
 # Powershell 
 #create-aks-workload-identity.ps1

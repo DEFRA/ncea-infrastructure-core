@@ -61,7 +61,7 @@ spec:
               value: http://{{ .Values.kibana.host }}:{{ .Values.kibana.port }}
             - name: JAVA_OPTS
               value: |
-                -Dorg.eclipse.jetty.annotations.AnnotationParser.LEVEL=OFF -Djava.security.egd=file:/dev/./urandom -Djava.awt.headless=true -Xms512M -Xss512M -Xmx2G -XX:+UseConcMarkSweepGC -Dgeonetwork.resources.dir=/catalogue-data/resources -Dgeonetwork.data.dir=/catalogue-data -Dgeonetwork.codeList.dir=/var/lib/jetty/webapps/geonetwork/WEB-INF/data/config/codelist -Dgeonetwork.schema.dir=/var/lib/jetty/webapps/geonetwork/WEB-INF/data/config/schema_plugins -Djavax.net.ssl.trustStore=/var/lib/jetty/elasticsearch-ca -Djavax.net.ssl.trustStorePassword=changeit
+                -Dorg.eclipse.jetty.annotations.AnnotationParser.LEVEL=OFF -Djava.security.egd=file:/dev/./urandom -Djava.awt.headless=true -Xms512M -Xss512M -Xmx2G -XX:+UseConcMarkSweepGC -Dgeonetwork.resources.dir=/catalogue-data/resources -Dgeonetwork.data.dir=/catalogue-data -Dgeonetwork.codeList.dir=/var/lib/jetty/webapps/geonetwork/WEB-INF/data/config/codelist -Dgeonetwork.schema.dir=/var/lib/jetty/webapps/geonetwork/WEB-INF/data/config/schema_plugins -Djavax.net.ssl.trustStore=/var/lib/jetty/elasticsearch-ca -Djavax.net.ssl.trustStorePassword=changeit -Djavax.net.debug=true
           ports:
             - name: tcp
               containerPort: 8080
