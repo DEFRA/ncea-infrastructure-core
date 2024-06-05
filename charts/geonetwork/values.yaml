@@ -1,0 +1,132 @@
+# Default values for geonetwork ncea.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+#target k8s namespace
+namespace: geonetwork
+georeplicaCount: 1
+
+geoimage:  
+  repository: $(containerRepostitoryFullPath)
+  tag: pipeline
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+nameOverride: &gn_host "geonetwork"
+fullnameOverride: "geonetwork" 
+
+geoservice:
+  type: ClusterIP
+  port: 8080
+
+#resources: {}
+# We usually recommend not to specify default resources and to leave this as a conscious
+# choice for the user. This also increases chances charts run on environments with little
+# resources, such as Minikube. If you do want to specify resources, uncomment the following
+# lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+# limits:
+#   cpu: 100m
+#   memory: 128Mi
+# requests:
+#   cpu: 100m
+#   memory: 128Mi
+
+georesources:
+  resources:
+    requests:
+      memory: "1200Mi"
+      cpu: "250m"
+    limits:
+      memory: "1500Mi"
+      cpu: "1400m"
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+ingress:
+  name: geonetwork-ingress
+  enabled: true
+  classname: nginx
+  host: $(ingressHostname)
+  elasticHostName: $(elasticSearchIngressHostname)
+  kibanaHostName: $(kibanaIngressHostName)
+  path: /
+  pathType: Prefix
+
+#database type
+db_type: postgres
+
+postgres:
+  host: $(postgresHostname)
+  port: "5432"
+  dbuser: $(postgresDbUser)
+  password: $(postgresDbPassword)
+  dbname: $(postgresDbName)
+
+create_kibana_pod: true
+kibana:
+  host: $(kibanaHostName)
+  port: 5601
+  name: $(kibanaInstanceName)
+  serviceType: ClusterIP
+  repository: $(kibanaContainerRepositoryFullPath)
+  tag: 7.17.15
+  pullPolicy: IfNotPresent
+
+# Default values for elasticsearch.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+create_elasticsearch_pod: true
+esimage:
+  repository: $(elasticContainerRepositoryFullPath)
+  tag: 7.17.15
+  pullPolicy: IfNotPresent
+  replicaCount: 1
+
+esservice:
+  type: ClusterIP
+  port: 9200
+
+esresources:
+  resources: {}
+
+elasticsearch:
+  name: elasticsearch
+  host: elasticsearch
+  port: 9200
+  protocol: http
+  # values override for subchart elasticsearch
+  create_elasticsearch_pod: true
+
+pv:
+  # This is the resource id of the precreated azure disk for geonetwork persistent volume.
+  geoCataloguePvName: geonetwork-azuredisk-pv
+  geoCataloguePvDiskResourceId: $(geoCataloguePvDiskResourceId)
+  geoCataloguePvSize: 4Gi
+  elasticIndexPvName: elastic-index-azuredisk-pv
+  elasticIndexPvDiskResourceId: $(elasticIndexPvDiskResourceId)
+  elasticIndexPvSize: 30Gi
+
+pvc:
+  geoCataloguePvcName: geonetwork-azuredisk-pvc
+  # initial size for geonetwork catalogue data
+  geoCataloguePvcSize: 4Gi  
+  geoCatalogueStorageClassName: managed-csi # Class for managed Azure disks
+  geoMetaDataFileShareName: geonetwork-meta-fileshare-pvc
+  geoMetaDataFileShareSize: 10Gi
+  elasticIndexPvcName: elasticindex-azuredisk-pvc
+  elasticIndexPvcSize: 30Gi
+  elasticIndexStorageClassName: managed-csi 
+
+peSaFileshare:
+  geoMetaDataFileShareScName: pe-geonetwork-metadata-azurefile-sc
+  storageAccountResourceGroup: $(storageAccountResourceGroup)
+  storageAccountName: $(storageAccountName)
+  storageAccountFilePrivateEndpointFqdn: $(storageAccountFilePrivateEndpointFqdn)
+  geoStorageAccountShareName: metadata-import
+
+  

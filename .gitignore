@@ -40,7 +40,7 @@ Thumbs.db
 
 # HELM               #
 ######################
-values.yaml
+
 dev-values.yaml
 sbox-values.yaml
 snd3-values.yaml
