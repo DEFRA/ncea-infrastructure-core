@@ -56,7 +56,7 @@ steps:
       storageClassSKU=$(elasticStorageClassSKU)
       resourceGroup=$(elasticResourceGroup)
       antiAffinity=$(elasticAntiAffinity)
-      ingress.hosts.host=$(elasticSearchIngressHostname)
+      ingress.hosts[0].host=$(elasticSearchIngressHostname)
       image=$(elasticImage)
       imageTag=$(elasticImageTag)
     install: true

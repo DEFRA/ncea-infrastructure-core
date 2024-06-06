@@ -54,7 +54,7 @@ steps:
       elasticsearchCredentialSecret=$(elasticsearchCredentialSecret)
       elasticsearchHosts=$(elasticsearchHosts)
       replicas=$(kibanaReplicas)
-      ingress.hosts.host=$(kibanaIngressHostname)
+      ingress.hosts[0].host=$(kibanaIngressHostname)
       image=$(kibanaImage)
       imageTag=$(kibanaImageTag)
     install: true
