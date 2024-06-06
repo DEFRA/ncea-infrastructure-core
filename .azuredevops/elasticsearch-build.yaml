@@ -33,5 +33,5 @@ extends:
     includePlatformEnvs: true
     appBuildConfig:
       appFrameworkType: "helm"
-      projectPath: "charts/elasticsearch/Chart.yaml"
+      projectPath: "helm/elasticsearch/Chart.yaml"
       imageRepoName: "ncea-elasticsearch"
