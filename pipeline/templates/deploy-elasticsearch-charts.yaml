@@ -53,7 +53,7 @@ steps:
       replicas=$(elasticReplicas)
       minimumMasterNodes=$(elasticMinMasterNodes)
       volumeClaimTemplate.storageClassName=$(elasticStorageClassName)
-      storageClassSKU=$(elasticStorageClassSKU)
+      storageClassSku=$(elasticStorageClassSKU)
       resourceGroup=$(elasticResourceGroup)
       antiAffinity=$(elasticAntiAffinity)
       ingress.hosts[0].host=$(elasticSearchIngressHostname)
