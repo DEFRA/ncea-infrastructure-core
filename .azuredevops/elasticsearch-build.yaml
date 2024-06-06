@@ -28,10 +28,10 @@ extends:
   template: /pipelines/common-app-build.yaml@DEFRA-ADPPipelineCommon
   parameters:
     teamName: "ncea-search"
-    serviceName: "elasticsearch"
+    serviceName: "ncea-elasticsearch"
     deployFromFeature: ${{ parameters.deployFromFeature }}
     includePlatformEnvs: true
     appBuildConfig:
       appFrameworkType: "helm"
       projectPath: "charts/elasticsearch/Chart.yaml"
-      imageRepoName: "elasticsearch"
+      imageRepoName: "ncea-elasticsearch"
