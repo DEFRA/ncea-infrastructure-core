@@ -4,7 +4,7 @@ nodeGroup: "master"
 
 ## The service that non master groups will try to connect to when joining the cluster
 # This should be set to clusterName + "-" + nodeGroup for your master group
-masterService: ""
+masterService: "elasticsearch-master"
 
 # Elasticsearch roles that will be applied to this nodeGroup
 # These will be set as environment variables. E.g. node.roles=master
@@ -22,8 +22,8 @@ roles:
   - transform
 
 # Default
-replicas: 3
-minimumMasterNodes: 2
+replicas: $(elasticReplicas)
+minimumMasterNodes: $(elasticMinMasterNodes)
 
 # for test
 #replicas: 1
@@ -63,7 +63,7 @@ envFrom: []
 # Disable it to use your own elastic-credential Secret.
 secret:
   enabled: true
-  password: "" # generated randomly if not defined
+  password: $(elasticPassword) # generated randomly if not defined
 
 # A list of secrets and their paths to mount inside the pod
 # This is useful for mounting certificates for security and for mounting
@@ -80,10 +80,8 @@ hostAliases: []
 #  - "foo.local"
 #  - "bar.local"
 
-#image: "sndadpinfcr3401.azurecr.io/image/elasticsearch"
-#imageTag: "7.17.15"
-image: "elasticsearch"
-imageTag: "7.17.15"
+image: $(elasticImage)
+imageTag: $(elasticImageTag)
 imagePullPolicy: "IfNotPresent"
 
 podAnnotations: {}
@@ -96,11 +94,11 @@ esJavaOpts: "" # example: "-Xmx1g -Xms1g"
 
 resources:
   requests:
-    cpu: "1000m"
+    cpu: "1500m"
     memory: "2Gi"
   limits:
-    cpu: "1000m"
-    memory: "2Gi"
+    cpu: "3000m"
+    memory: "4Gi"
 
 initResources: {}
 # limits:
@@ -114,16 +112,15 @@ networkHost: "0.0.0.0"
 
 volumeClaimTemplate:
   accessModes: ["ReadWriteOnce"]
-  storageClassName: dynamic-premium-zrs
+  storageClassName: $(elasticStorageClassName)
   resources:
     requests:
       storage: 30Gi
 
 storageClass:
-  create: true
-  storageClassName: dynamic-premium-zrs
-  storageClassSku: Premium_ZRS
-  resourceGroup: sndadpinfrg3401-ncea-search
+  create: true  
+  storageClassSku: $(elasticStorageClassSKU)
+  resourceGroup: $(elasticResourceGroup)
   reclaimPolicy: Retain
 
 rbac:
@@ -187,7 +184,7 @@ antiAffinityTopologyKey: "kubernetes.io/hostname"
 
 # Hard means that by default pods will only be scheduled if there are enough nodes for them
 # and that they will never end up on the same node. Setting this to soft will do this "best effort"
-antiAffinity: "soft"
+antiAffinity: $(elasticAntiAffinity)
 
 # This is the node affinity settings as defined in
 # https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity-beta-feature
@@ -268,14 +265,14 @@ tolerations: []
 # Enabling this will publicly expose your Elasticsearch instance.
 # Only enable this if you have security enabled on your cluster
 ingress:
-  enabled: false
-  annotations: {}
-  # kubernetes.io/ingress.class: nginx
-  # kubernetes.io/tls-acme: "true"
+  enabled: true
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/use-regex: "true"
   className: "nginx"
-  pathtype: ImplementationSpecific
+  pathtype: Prefix
   hosts:
-    - host: chart-example.local
+    - host: $(elasticSearchIngressHostname)
       paths:
         - path: /
   tls: []
