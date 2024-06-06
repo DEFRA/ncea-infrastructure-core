@@ -124,7 +124,7 @@ storageClass:
   storageClassName: dynamic-premium-zrs
   storageClassSku: Premium_ZRS
   resourceGroup: sndadpinfrg3401-ncea-search
-  reclaimPolicy: Delete
+  reclaimPolicy: Retain
 
 rbac:
   create: false
