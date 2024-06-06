@@ -1,7 +1,19 @@
+{{- if .Values.storageClass.create -}}
+{{- $fullName := include "elasticsearch.uname" . -}}
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
   name: {{ .Values.storageClass.storageClassName }}
+  labels:
+    heritage: {{ .Release.Service | quote }}
+    release: {{ .Release.Name | quote }}
+    chart: "{{ .Chart.Name }}"
+    app: "{{ template "elasticsearch.uname" . }}"
+    {{- range $key, $value := .Values.labels }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+  annotations:
+    esMajorVersion: "{{ include "elasticsearch.esMajorVersion" . }}"
 provisioner: disk.csi.azure.com
 parameters:
   skuName: {{ .Values.storageClass.storageClassSku }}
@@ -9,3 +21,4 @@ parameters:
 reclaimPolicy: {{ .Values.storageClass.reclaimPolicy }}
 volumeBindingMode: WaitForFirstConsumer
 allowVolumeExpansion: true
+{{- end -}}
