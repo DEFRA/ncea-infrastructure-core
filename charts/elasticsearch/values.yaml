@@ -119,8 +119,7 @@ volumeClaimTemplate:
 
 storageClass:
   create: true  
-  storageClassSku: $(elasticStorageClassSKU)
-  resourceGroup: $(elasticResourceGroup)
+  storageClassSku: Premium_ZRS
   reclaimPolicy: Retain
 
 rbac:

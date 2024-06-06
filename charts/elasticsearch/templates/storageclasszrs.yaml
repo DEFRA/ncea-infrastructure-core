@@ -17,7 +17,6 @@ metadata:
 provisioner: disk.csi.azure.com
 parameters:
   skuName: {{ .Values.storageClass.storageClassSku }}
-  resourceGroup: {{ .Values.storageClass.resourceGroup }}
 reclaimPolicy: {{ .Values.storageClass.reclaimPolicy }}
 volumeBindingMode: WaitForFirstConsumer
 allowVolumeExpansion: true
