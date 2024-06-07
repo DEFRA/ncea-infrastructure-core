@@ -8,38 +8,55 @@ variables:
     value: '$(Build.SourcesDirectory)/app/Dockerfile'
   - name: tag
     value: '$(Build.BuildId)'
+  - name : isMain
+    value: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
+  - name : isPullRequest
+    value: $[startsWith(variables['Build.SourceBranch'], 'refs/pull/')]
 
 pool:
   name: DEFRA-COMMON-ubuntu2204-SSV3
 
 steps:
 
-- task: AzureCLI@2
+- task: Bash@3
+  condition: and(succeeded(), and(eq(variables.isPullRequest, false), eq(variables.deployToDev, true)))
   inputs:
-    displayName: DockerBuildAndPush
-    azureSubscription: $(azureServiceConnection)
-    scriptType: bash
-    scriptLocation: inlineScript
-    inlineScript: |
-      az account set --subscription $(subscription)
-      PASSWORD=$(az acr login --name $(containerRegistry) --expose-token --output tsv --query accessToken)
-      docker login $(containerRegistry) -u $(acrUser) -p $PASSWORD
-      docker build -t '$(containerRegistry)/test:$(tag)' -f $(dockerfilePath) .
-      docker push '$(containerRegistry)/test:$(tag)'
+    targetType: 'inline' # Optional. Options: filePath, inline
+    #filePath: # Required when targetType == FilePath
+    #arguments: # Optional
+    script: |
+      ls -al
+    #workingDirectory: # Optional
+    #failOnStderr: false # Optional
+    #noProfile: true # Optional
+    #noRc: true # Optional
 
-- task: KubeloginInstaller@0
-  inputs:
-    kubeloginVersion: 'latest'
+# - task: AzureCLI@2
+#   inputs:
+#     displayName: DockerBuildAndPush
+#     azureSubscription: $(azureServiceConnection)
+#     scriptType: bash
+#     scriptLocation: inlineScript
+#     inlineScript: |
+#       az account set --subscription $(subscription)
+#       PASSWORD=$(az acr login --name $(containerRegistry) --expose-token --output tsv --query accessToken)
+#       docker login $(containerRegistry) -u $(acrUser) -p $PASSWORD
+#       docker build -t '$(containerRegistry)/test:$(tag)' -f $(dockerfilePath) .
+#       docker push '$(containerRegistry)/test:$(tag)'
 
-- task: AzureCLI@2
-  inputs:
-    displayName: queryAks
-    azureSubscription: $(azureServiceConnection)
-    scriptType: bash
-    scriptLocation: inlineScript
-    inlineScript: |
-      az aks get-credentials --resource-group $(storageAccountResourceGroup)  --name $(aksInstanceName)
-      kubectl get nodes
+# - task: KubeloginInstaller@0
+#   inputs:
+#     kubeloginVersion: 'latest'
+
+# - task: AzureCLI@2
+#   inputs:
+#     displayName: queryAks
+#     azureSubscription: $(azureServiceConnection)
+#     scriptType: bash
+#     scriptLocation: inlineScript
+#     inlineScript: |
+#       az aks get-credentials --resource-group $(storageAccountResourceGroup)  --name $(aksInstanceName)
+#       kubectl get nodes
 
 
 
