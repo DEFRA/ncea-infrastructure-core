@@ -1,0 +1,59 @@
+name: $(Date:yyyyMMdd)$(Rev:.r)
+
+trigger: none
+  # branches:
+  #   include:
+  #     - main
+  #     - feature/*
+
+variables: 
+  - template: templates/variables-global.yaml
+  - name : azureServiceConnectionForAcr
+    value: AZR-NCE-DEV1  
+  - name : azureServiceConnectionForTest
+    value: AZR-NCE-TST
+  - name : deployToDev
+    value: true
+  - name : deployToTest
+    value: false
+
+stages:
+
+- stage: 'dev'
+  displayName: 'Deploy to Dev'
+  condition: and(succeeded(), and(eq(variables.isPullRequest, false), eq(variables.deployToDev, true)))
+  jobs:
+  - deployment: Deploy
+    pool:
+      name: DEFRA-COMMON-ubuntu2204-SSV3
+    variables:
+      - template: templates/variables-dev.yaml
+    environment: dev 
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - template: templates/deploy-nginx-charts.yaml
+              parameters:
+                releaseName: "ingress-nginx"
+                armServiceConnection: AZR-NCE-DEV1
+
+- stage: 'test'
+  displayName: 'Deploy to test'
+  dependsOn: dev
+  condition: and(succeeded(), eq(variables.deployToTest, true))
+  jobs:
+  - deployment: Deploy
+    pool:
+      name: DEFRA-COMMON-ubuntu2204-SSV3
+    variables:
+      - template: templates/variables-test.yaml
+    environment: test 
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - template: templates/deploy-nginx-charts.yaml
+              parameters:
+                releaseName: "ingress-nginx"
+                armServiceConnection: AZR-NCE-TST
