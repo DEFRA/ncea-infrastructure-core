@@ -21,7 +21,7 @@ stages:
 
 - stage: 'dev'
   displayName: 'Deploy to Dev'
-  condition: and(succeeded(), eq(variables.deployToDev, true))
+  condition: and(succeeded(), and(eq(variables.isPullRequest, false), eq(variables.deployToDev, true)))
   jobs:
   - deployment: Deploy
     pool:
