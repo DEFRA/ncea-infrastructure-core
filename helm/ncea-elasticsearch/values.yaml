@@ -123,7 +123,7 @@ storageClass:
   create: true
   storageClassName: dynamic-premium-zrs
   storageClassSku: Premium_ZRS
-  resourceGroup: sndadpinfrg3401-ncea-search
+  resourceGroup: sndadpinfrg1401-ncea-search
   reclaimPolicy: Retain
 
 rbac:
