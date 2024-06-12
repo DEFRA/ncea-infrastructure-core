@@ -26,7 +26,7 @@ controller:
     ## for backwards compatibility consider setting the full image url via the repository value below
     ## use *either* current default registry/image or repository format or installing chart by providing the values.yaml will fail
     ## repository:
-    tag: $(acrNginxControllerImageTag)
+    tag: "v1.8.1"
     digest:
     digestChroot:
     pullPolicy: IfNotPresent
@@ -378,9 +378,9 @@ controller:
   ## Ideally, there should be no limits.
   ## https://engineering.indeedblog.com/blog/2019/12/cpu-throttling-regression-fix/
   resources:
-    ##  limits:
-    ##    cpu: 100m
-    ##    memory: 90Mi
+    limits:
+      cpu: 1000m
+      memory: 2000Mi
     requests:
       cpu: 100m
       memory: 90Mi
@@ -473,8 +473,8 @@ controller:
       enabled: true
     # -- Annotations to be added to the external controller service. See `controller.service.internal.annotations` for annotations to be added to the internal controller service.
     annotations:
-      service.beta.kubernetes.io/azure-load-balancer-internal=true
-      service.beta.kubernetes.io/azure-load-balancer-health-probe-request-path=/healthz
+      service.beta.kubernetes.io/azure-load-balancer-internal: true
+      service.beta.kubernetes.io/azure-load-balancer-health-probe-request-path: /healthz
     # -- Labels to be added to both controller services.
     labels: {}
     # -- Type of the external controller service.
@@ -777,13 +777,13 @@ controller:
           drop:
             - ALL
         readOnlyRootFilesystem: true
-      resources: {}
-      # limits:
-      #   cpu: 10m
-      #   memory: 20Mi
-      # requests:
-      #   cpu: 10m
-      #   memory: 20Mi
+      resources:
+        limits:
+          cpu: 10m
+          memory: 20Mi
+        requests:
+          cpu: 10m
+          memory: 20Mi
     patchWebhookJob:
       name: patch
       # -- Security context for webhook patch containers
@@ -1051,13 +1051,13 @@ defaultBackend:
   podAnnotations: {}
   replicaCount: 1
   minAvailable: 1
-  resources: {}
-  # limits:
-  #   cpu: 10m
-  #   memory: 20Mi
-  # requests:
-  #   cpu: 10m
-  #   memory: 20Mi
+  resources:
+    limits:
+      cpu: 10m
+      memory: 20Mi
+    requests:
+      cpu: 10m
+      memory: 20Mi
 
   extraVolumeMounts: []
   ## Additional volumeMounts to the default backend container.
