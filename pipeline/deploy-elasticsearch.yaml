@@ -27,13 +27,13 @@ stages:
     pool:
       name: DEFRA-COMMON-ubuntu2204-SSV3
     variables:
-      - template: templates/variables-dev.yaml
+      - template: templates/variables-elasticsearch-dev.yaml
     environment: dev 
     strategy:
       runOnce:
         deploy:
           steps:
-            - template: templates/deploy-elasticsearch-charts.yaml
+            - template: deploy-elasticsearch-charts.yaml
               parameters:
                 releaseName: "elasticsearch"
                 armServiceConnection: AZR-NCE-DEV1
@@ -47,13 +47,13 @@ stages:
     pool:
       name: DEFRA-COMMON-ubuntu2204-SSV3
     variables:
-      - template: templates/variables-test.yaml
+      - template: templates/variables-elasticsearch-test.yaml
     environment: test 
     strategy:
       runOnce:
         deploy:
           steps:
-            - template: templates/deploy-elasticsearch-charts.yaml
+            - template: deploy-elasticsearch-charts.yaml
               parameters:
                 releaseName: "elasticsearch"
                 armServiceConnection: AZR-NCE-TST

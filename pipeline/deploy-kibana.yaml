@@ -27,15 +27,15 @@ stages:
     pool:
       name: DEFRA-COMMON-ubuntu2204-SSV3
     variables:
-      - template: templates/variables-dev.yaml
+      - template: templates/variables-kibana-dev.yaml
     environment: dev 
     strategy:
       runOnce:
         deploy:
           steps:
-            - template: templates/deploy-nginx-charts.yaml
+            - template: deploy-kibana-charts.yaml
               parameters:
-                releaseName: "ingress-nginx"
+                releaseName: "kibana"
                 armServiceConnection: AZR-NCE-DEV1
 
 - stage: 'test'
@@ -47,13 +47,13 @@ stages:
     pool:
       name: DEFRA-COMMON-ubuntu2204-SSV3
     variables:
-      - template: templates/variables-test.yaml
+      - template: templates/variables-kibana-test.yaml
     environment: test 
     strategy:
       runOnce:
         deploy:
           steps:
-            - template: templates/deploy-nginx-charts.yaml
+            - template: deploy-kibana-charts.yaml
               parameters:
-                releaseName: "ingress-nginx"
+                releaseName: "kibana"
                 armServiceConnection: AZR-NCE-TST

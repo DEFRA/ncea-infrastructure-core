@@ -49,7 +49,7 @@ valuesOrig.yaml
 valuesADP-with-pv.yaml
 sbox3-values.yaml
 valuesSBOX3.yaml
-
+values-local.yaml
 # Powershell 
 #create-aks-workload-identity.ps1
 #deploy-internal-nginx.ps1
