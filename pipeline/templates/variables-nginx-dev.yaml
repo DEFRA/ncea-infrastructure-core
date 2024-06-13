@@ -1,5 +1,3 @@
 variables:
 - group: azureVariables-dev
-- group: elasticSearchVariables-dev
-- group: kibanaVariables-dev
 - group: nginxVariables-dev
