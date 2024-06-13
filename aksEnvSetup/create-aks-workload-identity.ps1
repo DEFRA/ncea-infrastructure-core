@@ -14,8 +14,8 @@
 
 #Connect-AzAccount -Subscription "AZR-NCE-SND1"
 
-$geoNamespace =""
-$frontNamespace = ""
+#$geoNamespace =""
+$frontNamespace = "nceafrontend"
 $geoIdentity = ""
 $aksName = ""
 $aksRg = "" # managed identities should already exist in this resource group. 
@@ -32,7 +32,7 @@ ForEach ($identity in $identities ) {
 ## Create namespaces
 
 kubectl config use-context $aksName
-kubectl create namespace $geoNamespace
+#kubectl create namespace $geoNamespace
 kubectl create namespace $frontNamespace
 
 ## End manual set of variables

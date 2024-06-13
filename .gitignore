@@ -57,3 +57,8 @@ values-local.yaml
 #create-aks-workload-identity.ps1
 #deploy-internal-nginx.ps1
 
+aksEnvSetup/appgwtemp.ps1
+aksEnvSetup/create-aks-workload-identity-dev.ps1
+aksEnvSetup/deploy-internal-nginx-dev.ps1
+aksEnvSetup/newcluster.txt
+charts/elasticsearch/valuesDev.yaml
