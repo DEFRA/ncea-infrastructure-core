@@ -1,5 +1,3 @@
 variables:
 - group: azureVariables-test
-- group: elasticSearchVariables-test
-- group: kibanaVariables-test
 - group: nginxVariables-test
