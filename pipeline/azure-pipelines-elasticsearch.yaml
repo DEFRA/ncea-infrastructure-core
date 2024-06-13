@@ -9,7 +9,7 @@ trigger: none
 variables: 
   - template: templates/variables-global.yaml
   - name : azureServiceConnectionForAcr
-    value: AZR-NCE-DEV1  
+    value: AZR-NCE-DEV1
   - name : azureServiceConnectionForTest
     value: AZR-NCE-TST
   - name : deployToDev
@@ -33,7 +33,7 @@ stages:
       runOnce:
         deploy:
           steps:
-            - template: templates/steps-deploy-elasticsearch-helm-charts.yaml
+            - template: steps-deploy-elasticsearch-helm-charts.yaml
               parameters:
                 releaseName: "elasticsearch"
                 armServiceConnection: AZR-NCE-DEV1
@@ -53,7 +53,7 @@ stages:
       runOnce:
         deploy:
           steps:
-            - template: templates/steps-deploy-elasticsearch-helm-charts.yaml
+            - template: steps-deploy-elasticsearch-helm-charts.yaml
               parameters:
                 releaseName: "elasticsearch"
                 armServiceConnection: AZR-NCE-TST
