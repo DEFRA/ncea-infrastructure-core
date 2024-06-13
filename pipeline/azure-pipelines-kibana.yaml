@@ -33,7 +33,7 @@ stages:
       runOnce:
         deploy:
           steps:
-            - template: templates/steps-deploy-kibana-helm-charts.yaml
+            - template: steps-deploy-kibana-helm-charts.yaml
               parameters:
                 releaseName: "kibana"
                 armServiceConnection: AZR-NCE-DEV1
@@ -53,7 +53,7 @@ stages:
       runOnce:
         deploy:
           steps:
-            - template: templates/steps-deploy-kibana-helm-charts.yaml
+            - template: steps-deploy-kibana-helm-charts.yaml
               parameters:
                 releaseName: "kibana"
                 armServiceConnection: AZR-NCE-TST

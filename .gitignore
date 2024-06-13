@@ -49,6 +49,9 @@ valuesOrig.yaml
 valuesADP-with-pv.yaml
 sbox3-values.yaml
 valuesSBOX3.yaml
+deploy-internal-nginx-ollylab.ps1
+valuesOllyLab.yaml
+valuesSBOX.yaml
 
 # Powershell 
 #create-aks-workload-identity.ps1
