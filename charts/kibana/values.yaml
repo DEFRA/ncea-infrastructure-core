@@ -141,7 +141,7 @@ ingress:
   className: "nginx"
   pathtype: Prefix
   annotations:
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
     nginx.ingress.kubernetes.io/use-regex: "true"
   hosts:
     - host: $(kibanaIngressHostname)

@@ -27,7 +27,7 @@ stages:
     pool:
       name: DEFRA-COMMON-ubuntu2204-SSV3
     variables:
-      - template: templates/variables-dev.yaml
+      - template: templates/variables-kibana-dev.yaml
     environment: dev 
     strategy:
       runOnce:
@@ -47,7 +47,7 @@ stages:
     pool:
       name: DEFRA-COMMON-ubuntu2204-SSV3
     variables:
-      - template: templates/variables-test.yaml
+      - template: templates/variables-kibana-test.yaml
     environment: test 
     strategy:
       runOnce:
