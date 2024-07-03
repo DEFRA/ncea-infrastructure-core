@@ -18,4 +18,4 @@ steps:
       PASSWORD=$(az acr login --name $(preAcr) --expose-token --output tsv --query accessToken)
       docker login $(preAcr) -u $(acrUser) -p $PASSWORD
       echo "importing container"
-      az acr import --name $(preAcrShort) --source test:510324 --image test:510324 --registry $(devAcrResourceID)
+      az acr import --name $(preAcrShort) --source defra/geonetwork428:20240624.2 --image defra/geonetwork428:20240624.2 --registry $(devAcrResourceID)
