@@ -1,0 +1,21 @@
+trigger: none
+
+variables: 
+  - group: acrTest
+
+pool:
+  name: DEFRA-COMMON-ubuntu2204-SSV5
+
+steps:
+
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: $(azureServiceConnection)
+    scriptType: bash
+    scriptLocation: inlineScript
+    inlineScript: |
+      az account set --subscription "$(preSub)
+      PASSWORD=$(az acr login --name $(preAcr) --expose-token --output tsv --query accessToken)
+      docker login $(preAcr) -u $(acrUser) -p $PASSWORD
+      echo "importing container"
+      az acr import --name $(preAcrShort) --source test:510324 --image test:510324 --registry $(devAcrResourceID)
