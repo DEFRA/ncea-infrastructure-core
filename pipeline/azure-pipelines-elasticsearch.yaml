@@ -12,9 +12,13 @@ variables:
     value: AZR-NCE-DEV1
   - name : azureServiceConnectionForTest
     value: AZR-NCE-TST
+  - name : azureServiceConnectionForPre
+    value: AZR-NCE-PRE
   - name : deployToDev
     value: true
   - name : deployToTest
+    value: true
+  - name : deployToPre
     value: true
 
 stages:
@@ -57,3 +61,23 @@ stages:
               parameters:
                 releaseName: "elasticsearch"
                 armServiceConnection: AZR-NCE-TST
+
+- stage: 'pre'
+  displayName: 'Deploy to Pre Prod'
+  dependsOn: test
+  condition: and(succeeded(), and(eq(variables.isPullRequest, false), eq(variables.deployToPre, true)))
+  jobs:
+  - deployment: Deploy
+    pool:
+      name: DEFRA-COMMON-ubuntu2204-SSV5
+    variables:
+      - template: templates/variables-elasticsearch-pre.yaml
+    environment: pre 
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - template: steps-deploy-elasticsearch-helm-charts.yaml
+              parameters:
+                releaseName: "elasticsearch"
+                armServiceConnection: AZR-NCE-PRE
