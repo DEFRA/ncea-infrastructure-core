@@ -13,7 +13,7 @@ extraEnvs:
   - name: "NODE_OPTIONS"
     value: "--max-old-space-size=1800"
   - name: "SERVER_PUBLICBASEURL"
-    value: $(urlKibanaIngressHostname)
+    value: "$(urlKibanaIngressHostname)"
 #  - name: MY_ENVIRONMENT_VAR
 #    value: the_value_goes_here
 

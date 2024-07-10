@@ -57,6 +57,7 @@ steps:
       ingress.hosts[0].host=$(kibanaIngressHostname)
       image=$(kibanaImage)
       imageTag=$(kibanaImageTag)
+      SERVER_PUBLICBASEURL=$(urlKibanaIngressHostname)
     install: true
     # force: true
     arguments: --debug
