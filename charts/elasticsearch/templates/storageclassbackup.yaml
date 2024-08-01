@@ -1,0 +1,36 @@
+{{- if .Values.storageClassBackup.create -}}
+{{- $fullName := include "elasticsearch.uname" . -}}
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: {{ .Values.storageClassBackup.storageClassName }}
+  labels:
+    heritage: {{ .Release.Service | quote }}
+    release: {{ .Release.Name | quote }}
+    chart: "{{ .Chart.Name }}"
+    app: "{{ template "elasticsearch.uname" . }}"
+    {{- range $key, $value := .Values.labels }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+  annotations:
+    esMajorVersion: "{{ include "elasticsearch.esMajorVersion" . }}"
+provisioner: file.csi.azure.com
+allowVolumeExpansion: true
+parameters:
+  resourceGroup: {{ .Values.storageClassBackup.storageAccountResourceGroup }}
+  storageAccount: {{ .Values.storageClassBackup.storageAccountName }}
+  server: {{ .Values.storageClassBackup.server }} 
+  shareName: {{ .Values.storageClassBackup.shareName }}
+  storeAccountKey: "false"
+reclaimPolicy: {{ .Values.storageClassBackup.reclaimPolicy }}
+volumeBindingMode: Immediate
+mountOptions:
+  - dir_mode=0777
+  - file_mode=0777
+  - uid=0
+  - gid=0
+  - mfsymlinks
+  - cache=strict  # https://linux.die.net/man/8/mount.cifs
+  - nosharesock  # reduce probability of reconnect race
+  - actimeo=30  # reduce latency for metadata-heavy workload
+{{- end -}}

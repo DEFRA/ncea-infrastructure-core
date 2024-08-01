@@ -33,7 +33,11 @@ esMajorVersion: ""
 
 # Allows you to add any config files in /usr/share/elasticsearch/config/
 # such as elasticsearch.yml and log4j2.properties
-esConfig: {}
+esConfig:
+  elasticsearch.yml: |  
+    path:
+      repo:
+       - /usr/share/elasticsearch/backup
 #  elasticsearch.yml: |
 #    key:
 #      nestedkey: value
@@ -120,6 +124,16 @@ volumeClaimTemplate:
 storageClass:
   create: true  
   storageClassSku: Premium_ZRS
+  reclaimPolicy: Retain
+
+storageClassBackup:
+  create: true
+  storageClassName: $(backupStorageClassName) 
+  pvcName: $(elasticBackupPvcName) 
+  storageAccountResourceGroup: $(storageAccountResourceGroup)  
+  storageAccountName: $(storageAccountName)
+  server: $(storageAccountFilePrivateEndpointFqdn)
+  shareName: elasticsearch-snapshots-backups
   reclaimPolicy: Retain
 
 rbac:
