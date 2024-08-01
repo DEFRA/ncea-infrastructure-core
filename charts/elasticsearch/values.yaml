@@ -168,14 +168,14 @@ persistence:
     enabled: false
   annotations: {}
 
-extraVolumes: []
-# - name: extras
-#   emptyDir: {}
+extraVolumes: 
+  - name: elasticsearch-backup
+    persistentVolumeClaim:
+      claimName: elastic-backup-fileshare-pvc
 
-extraVolumeMounts: []
-# - name: extras
-#   mountPath: /usr/share/extras
-#   readOnly: true
+extraVolumeMounts: 
+  - name: elasticsearch-backup
+    mountPath: /usr/share/elasticsearch/backup
 
 extraContainers: []
 # - name: do-something
