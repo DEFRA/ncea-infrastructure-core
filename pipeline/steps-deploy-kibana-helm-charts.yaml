@@ -59,7 +59,7 @@ steps:
       imageTag=$(kibanaImageTag)
       extraEnvs[0].value=$(urlKibanaIngressHostname)
     install: true
-    # force: true
+    force: true
     arguments: --debug
   
 - task: HelmDeploy@0
