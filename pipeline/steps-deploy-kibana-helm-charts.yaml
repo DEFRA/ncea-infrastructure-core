@@ -42,7 +42,6 @@ steps:
     azureSubscriptionEndpoint: ${{ parameters.armServiceConnection }}
     azureResourceGroup: $(aksResourceGroupName)
     kubernetesCluster : $(aksClusterName)
-    releaseName: ${{ parameters.releaseName }}
     namespace: $(aksNamespace)
     command: 'upgrade'
     chartType: 'FilePath'
@@ -59,6 +58,8 @@ steps:
       imageTag=$(kibanaImageTag)
       extraEnvs[0].value=$(urlKibanaIngressHostname)
     install: true
+    force: true    
+    releaseName: ${{ parameters.releaseName }}
     force: true
     arguments: --debug
   

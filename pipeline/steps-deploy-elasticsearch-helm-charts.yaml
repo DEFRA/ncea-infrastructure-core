@@ -42,7 +42,6 @@ steps:
     azureSubscriptionEndpoint: ${{ parameters.armServiceConnection }}
     azureResourceGroup: $(aksResourceGroupName)
     kubernetesCluster : $(aksClusterName)
-    releaseName: ${{ parameters.releaseName }}
     namespace: $(aksNamespace)
     command: 'upgrade'
     chartType: 'FilePath'
@@ -64,6 +63,7 @@ steps:
       storageClassBackup.server=$(storageAccountFilePrivateEndpointFqdn)
     install: true
     force: true
+    releaseName: ${{ parameters.releaseName }}
     arguments: --debug
   
 - task: HelmDeploy@0

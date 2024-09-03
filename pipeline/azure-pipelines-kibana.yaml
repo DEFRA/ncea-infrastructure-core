@@ -59,7 +59,7 @@ stages:
           steps:
             - template: steps-deploy-kibana-helm-charts.yaml
               parameters:
-                releaseName: "kibana"
+                releaseName: kibana
                 armServiceConnection: AZR-NCE-TST
 
 - stage: 'pre'
