@@ -14,7 +14,7 @@ steps:
     #filePath: # Required when targetType == FilePath
     #arguments: # Optional
     script: |
-      ls -al
+      ls -al '$(Build.SourcesDirectory)/charts/elasticsearch/'
     #workingDirectory: # Optional
     #failOnStderr: false # Optional
     #noProfile: true # Optional
@@ -46,7 +46,7 @@ steps:
     command: 'upgrade'
     chartType: 'FilePath'    
     releaseName: ${{ parameters.releaseName }}
-    chartPath: '$(Build.SourcesDirectory)/charts/elasticsearch/'
+    chartPath: '$(Build.SourcesDirectory)/charts/elasticsearch'
     valueFile: $(Build.SourcesDirectory)/charts/elasticsearch/values.yaml
     overrideValues: |
       secret.password=$(elasticPassword)
