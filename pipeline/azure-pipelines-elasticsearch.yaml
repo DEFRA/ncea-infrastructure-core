@@ -59,7 +59,7 @@ stages:
           steps:
             - template: steps-deploy-elasticsearch-helm-charts.yaml
               parameters:
-                releaseName: "elasticsearch"
+                releaseName: elasticsearch
                 armServiceConnection: AZR-NCE-TST
 
 - stage: 'pre'
