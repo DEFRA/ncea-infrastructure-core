@@ -44,8 +44,9 @@ steps:
     kubernetesCluster : $(aksClusterName)
     namespace: $(aksNamespace)
     command: 'upgrade'
-    chartType: 'FilePath'
-    chartPath: '$(Build.SourcesDirectory)/charts/elasticsearch'
+    chartType: 'FilePath'    
+    releaseName: ${{ parameters.releaseName }}
+    chartPath: '$(Build.SourcesDirectory)/charts/elasticsearch/'
     valueFile: $(Build.SourcesDirectory)/charts/elasticsearch/values.yaml
     overrideValues: |
       secret.password=$(elasticPassword)
@@ -63,8 +64,7 @@ steps:
       storageClassBackup.server=$(storageAccountFilePrivateEndpointFqdn)
     install: true
     force: true
-    releaseName: ${{ parameters.releaseName }}
-    arguments: --debug
+    #arguments: --debug
   
 - task: HelmDeploy@0
   displayName: 'Helm Rollback'
