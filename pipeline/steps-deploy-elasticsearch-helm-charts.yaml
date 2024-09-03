@@ -57,6 +57,11 @@ steps:
       ingress.hosts[0].host=$(elasticSearchIngressHostname)
       image=$(elasticImage)
       imageTag=$(elasticImageTag)
+      storageClassBackup.storageClassName=$(backupStorageClassName) 
+      storageClassBackup.pvcName=$(elasticBackupPvcName)
+      storageClassBackup.storageAccountResourceGroup=$(storageAccountResourceGroup)
+      storageClassBackup.storageAccountName=$(storageAccountName)
+      storageClassBackup.server=$(storageAccountFilePrivateEndpointFqdn)
     install: true
     # force: true
     arguments: --debug
