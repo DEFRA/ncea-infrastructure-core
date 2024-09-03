@@ -60,6 +60,7 @@ steps:
     install: true
     force: true    
     releaseName: ${{ parameters.releaseName }}
+    force: true
     arguments: --debug
   
 - task: HelmDeploy@0
