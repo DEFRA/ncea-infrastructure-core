@@ -63,7 +63,7 @@ steps:
       storageClassBackup.storageAccountName=$(storageAccountName)
       storageClassBackup.server=$(storageAccountFilePrivateEndpointFqdn)
     install: true
-    force: true
+    #force: true
     #arguments: --debug
   
 - task: HelmDeploy@0
