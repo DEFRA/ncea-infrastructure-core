@@ -1,7 +1,10 @@
 # Welcome to the NCEA INFRASTRUCTURE Repository
 
-This is the repository for the NCEA Azure INFRASTRUCTURE codebase.
-Infrastructure as code has been written in Bicep.
+This repository contains assets necessary for setup and configuration of the DEFRA NCEA service.
+
+1. Azure Kubernetes Environment setup. There are two scripts in /aksEnvSetup that need to be run after the provisioning of a new environment. These are 1 time only events.
+   1.  create-aks-workload-identity.ps1 <br/>
+   This will configure AKS workload identity and associate managed identities with kubernetes service accounts. See https://learn.microsoft.com/en-us/azure/aks/workload-identity-overview?tabs=dotnet
 
 # Pre-requisites
 
