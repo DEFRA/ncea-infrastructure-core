@@ -2,9 +2,13 @@
 
 This repository contains assets necessary for setup and configuration of the DEFRA NCEA service.
 
-1. Azure Kubernetes Environment setup. There are two scripts in /aksEnvSetup that need to be run after the provisioning of a new environment. These are 1 time only events.
+1. Azure Kubernetes Environment setup. There are two Powershell scripts in the directory /aksEnvSetup that need to be run after the provisioning of a new AKS environment. These are 1 ruun only events.
    1.  create-aks-workload-identity.ps1 <br/>
-   This will configure AKS workload identity and associate managed identities with kubernetes service accounts. See https://learn.microsoft.com/en-us/azure/aks/workload-identity-overview?tabs=dotnet
+   This will configure AKS workload identity and associate managed identities with kubernetes service accounts. Follow instructions in the script or see DEFRA NCEA project wiki for further details. <br/>
+   For further information about workload identity see https://learn.microsoft.com/en-us/azure/aks/workload-identity-overview?tabs=dotnet 
+   1. deploy-internal-nginx.ps1 <br/>
+   This will deploy the kubernetes nginx controller configured in internal mode. Follow instructions in the script or see DEFRA NCEA project wiki for further details. <br/>
+1. 
 
 # Pre-requisites
 
